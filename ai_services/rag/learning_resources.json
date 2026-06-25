@@ -1,0 +1,167 @@
+[
+  {
+    "id": "owasp-top-10-2025",
+    "title": "OWASP Top 10 Web Application Security Risks",
+    "type": "guide",
+    "provider": "OWASP",
+    "url": "https://owasp.org/www-project-top-ten/",
+    "topics": ["secure coding", "OWASP Top 10", "web application security", "risk awareness"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "4-6 hours",
+    "content": "Use the OWASP Top 10 as a developer-focused map of critical web application risks. Study broken access control, injection, security misconfiguration, cryptographic failures, insecure design, vulnerable components, authentication failures, integrity failures, logging failures, and server-side request forgery. Connect each category to concrete code review checks, threat modeling questions, and remediation habits."
+  },
+  {
+    "id": "owasp-sql-injection-prevention",
+    "title": "SQL Injection Prevention Cheat Sheet",
+    "type": "cheat_sheet",
+    "provider": "OWASP",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+    "topics": ["SQL injection prevention", "input validation", "parameterized queries", "secure coding"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "2-3 hours",
+    "content": "Learn how SQL injection happens when untrusted data is mixed into dynamic queries. Practice using parameterized queries, safe ORM APIs, allow-list validation, least-privilege database accounts, and review patterns that reject string-built SQL. Focus on fixing findings that mention injection, tainted input, database queries, or unsafe command construction."
+  },
+  {
+    "id": "owasp-input-validation",
+    "title": "Input Validation Cheat Sheet",
+    "type": "cheat_sheet",
+    "provider": "OWASP",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+    "topics": ["input validation", "allow-list validation", "data validation", "secure coding"],
+    "difficulty": "Beginner",
+    "estimated_effort": "2 hours",
+    "content": "Build a habit of validating data at trust boundaries. Prefer allow-list validation, strict types, length limits, range checks, canonicalization, and central validation helpers. Apply this when findings mention unchecked user input, unsafe parsing, deserialization risk, missing validation, or high-risk request parameters."
+  },
+  {
+    "id": "owasp-secrets-management",
+    "title": "Secrets Management Cheat Sheet",
+    "type": "cheat_sheet",
+    "provider": "OWASP",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+    "topics": ["secrets management", "API keys", "credentials", "secure configuration"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "2-4 hours",
+    "content": "Learn how to keep secrets out of source code and logs. Practice environment-based configuration, managed secret stores, key rotation, access control, audit trails, and incident response for leaked credentials. Use this for findings involving hardcoded passwords, tokens, API keys, private keys, or insecure configuration."
+  },
+  {
+    "id": "owasp-secure-coding-practices",
+    "title": "Secure Coding Practices Quick Reference Guide",
+    "type": "guide",
+    "provider": "OWASP",
+    "url": "https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/",
+    "topics": ["secure coding", "authentication", "authorization", "error handling", "logging"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "4 hours",
+    "content": "Use this as a broad checklist for secure implementation. It covers validation, output encoding, authentication, password management, access control, session handling, error handling, logging, data protection, communication security, system configuration, database security, and file management. Map security findings to repeatable coding practices."
+  },
+  {
+    "id": "python-unittest",
+    "title": "unittest - Unit Testing Framework",
+    "type": "documentation",
+    "provider": "Python",
+    "url": "https://docs.python.org/3/library/unittest.html",
+    "topics": ["Python unit testing", "test cases", "test discovery", "fixtures"],
+    "difficulty": "Beginner",
+    "estimated_effort": "3-5 hours",
+    "content": "Learn Python's standard unit testing framework: test cases, assertions, setup and teardown, test suites, and discovery. Use it to add targeted regression tests around changed logic, edge cases, security-sensitive validation, and bug-prone code paths when coverage or reliability metrics are weak."
+  },
+  {
+    "id": "pytest-docs",
+    "title": "pytest Documentation",
+    "type": "documentation",
+    "provider": "pytest",
+    "url": "https://docs.pytest.org/en/stable/",
+    "topics": ["Python unit testing", "fixtures", "parametrization", "test design"],
+    "difficulty": "Beginner",
+    "estimated_effort": "3-6 hours",
+    "content": "Use pytest to write concise, maintainable tests with plain assertions, fixtures, parametrization, and discovery. Practice tests for boundary cases, validation rules, refactoring safety, security fixes, and behavior that previously had no coverage."
+  },
+  {
+    "id": "coverage-py",
+    "title": "Coverage.py Documentation",
+    "type": "documentation",
+    "provider": "Coverage.py",
+    "url": "https://coverage.readthedocs.io/",
+    "topics": ["test coverage", "coverage measurement", "Python testing", "quality gates"],
+    "difficulty": "Beginner",
+    "estimated_effort": "2-3 hours",
+    "content": "Learn how to measure which Python code is exercised by tests, inspect missing lines and branches, and use coverage reports to guide meaningful test additions. This is useful when Sonar coverage is low, quality gates fail on coverage, or critical files lack regression tests."
+  },
+  {
+    "id": "refactoring-guru-techniques",
+    "title": "Refactoring Techniques",
+    "type": "guide",
+    "provider": "Refactoring.Guru",
+    "url": "https://refactoring.guru/refactoring/techniques",
+    "topics": ["code refactoring", "maintainability", "clean code", "duplication reduction"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "5-8 hours",
+    "content": "Study practical refactoring moves for composing methods, moving features between objects, organizing data, simplifying conditionals, and reducing duplication. Apply these techniques to high-complexity files, repeated logic, oversized functions, and code smells reported by SonarQube."
+  },
+  {
+    "id": "refactoring-guru-smells",
+    "title": "Code Smells",
+    "type": "guide",
+    "provider": "Refactoring.Guru",
+    "url": "https://refactoring.guru/refactoring/smells",
+    "topics": ["clean code", "code smells", "maintainability", "refactoring"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "4-6 hours",
+    "content": "Learn to recognize bloaters, object-orientation abusers, change preventers, dispensables, and couplers. Use code smell recognition to turn Sonar code smells into concrete refactoring decisions, especially when maintainability rating, technical debt, or code smell counts are weak."
+  },
+  {
+    "id": "sonar-cognitive-complexity",
+    "title": "Cognitive Complexity",
+    "type": "whitepaper",
+    "provider": "SonarSource",
+    "url": "https://www.sonarsource.com/resources/cognitive-complexity/",
+    "topics": ["cognitive complexity", "code refactoring", "maintainability", "readability"],
+    "difficulty": "Intermediate",
+    "estimated_effort": "2-4 hours",
+    "content": "Learn why deeply nested control flow, tangled conditionals, recursion, and hard-to-follow branches make code harder to understand. Practice flattening conditionals, extracting functions, using guard clauses, and separating responsibilities when cognitive complexity or complexity issues are high."
+  },
+  {
+    "id": "sonar-clean-as-you-code",
+    "title": "Clean as You Code",
+    "type": "documentation",
+    "provider": "SonarSource",
+    "url": "https://docs.sonarsource.com/sonarqube-server/latest/user-guide/clean-as-you-code/",
+    "topics": ["SonarQube clean code practices", "quality gates", "maintainability", "test coverage"],
+    "difficulty": "Beginner",
+    "estimated_effort": "2 hours",
+    "content": "Learn the SonarQube practice of keeping new or changed code clean before trying to fix every legacy issue. Focus on quality gates, new-code conditions, maintainability, reliability, security, coverage, and duplication. Use this when Sonar quality gate status, code smells, coverage, or duplication need sustained improvement."
+  },
+  {
+    "id": "sonar-clean-code",
+    "title": "Clean Code",
+    "type": "documentation",
+    "provider": "SonarSource",
+    "url": "https://docs.sonarsource.com/sonarqube-server/latest/user-guide/clean-code/",
+    "topics": ["SonarQube clean code practices", "clean code", "maintainability", "reliability", "security"],
+    "difficulty": "Beginner",
+    "estimated_effort": "2-3 hours",
+    "content": "Use Sonar's Clean Code model to connect issues to software qualities and code attributes. Learn how maintainability, reliability, security, consistency, intentionality, adaptability, and responsibility relate to day-to-day fixes. Apply this to prioritize Sonar issues and prevent repeated quality gate failures."
+  },
+  {
+    "id": "sonar-duplications",
+    "title": "Duplications Metric Definition",
+    "type": "documentation",
+    "provider": "SonarSource",
+    "url": "https://docs.sonarsource.com/sonarqube-server/latest/user-guide/code-metrics/metrics-definition/",
+    "topics": ["duplication reduction", "maintainability", "SonarQube metrics", "clean code"],
+    "difficulty": "Beginner",
+    "estimated_effort": "1-2 hours",
+    "content": "Learn how SonarQube reports duplicated blocks, duplicated lines, and duplication density. Use duplication metrics to decide where shared helpers, clearer abstractions, or test parametrization can reduce copy-paste maintenance risk without over-engineering."
+  },
+  {
+    "id": "google-python-style-guide",
+    "title": "Google Python Style Guide",
+    "type": "style_guide",
+    "provider": "Google",
+    "url": "https://google.github.io/styleguide/pyguide.html",
+    "topics": ["clean code", "Python maintainability", "readability", "style"],
+    "difficulty": "Beginner",
+    "estimated_effort": "4-6 hours",
+    "content": "Use a mature Python style guide to improve naming, module structure, imports, docstrings, exception handling, tests, and readability. This is useful when style violations, maintainability issues, inconsistent naming, or hard-to-review Python code appear in analysis."
+  }
+]

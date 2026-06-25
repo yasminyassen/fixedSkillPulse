@@ -1,0 +1,13 @@
+-r requirements.txt
+
+# Static analysis (matches SkillPulse metric framework)
+radon==6.0.1
+pylint==3.3.2
+mypy==1.14.1
+vulture==2.14
+flake8==7.1.1
+flake8-bugbear==24.12.12
+pydeps==3.0.1
+interrogate==1.7.0
+pytest==8.3.4
+ruff==0.9.2

@@ -1,0 +1,34 @@
+# Product Requirements Document (PRD) Supermarket Association Rule Mining Tool
+
+## 1. Project Overview
+The goal of this project is to build a data mining tool that discovers product associations from an online retail store's transaction records (`supermarket_data.csv`). This tool will help in product recommendations, store layout optimization, and cross-selling strategies by identifying items frequently bought together.
+
+## 2. User Stories & Requirements
+
+### US-001 Data Preprocessing and Cleaning
+As a Data Analyst, I want the system to preprocess and clean the supermarket transaction data automatically, so that my analysis is accurate and excludes canceled orders.
+Acceptance Criteria
+- System must group items by invoice number to create complete transactions.
+- System must exclude all invoices starting with 'C' (returnscancellations).
+- System must remove rows with empty descriptions.
+- System must use the Description column to represent items in the final output.
+
+### US-002 Dynamic Threshold Configuration
+As a Data Analyst, I want to input the minimum support and minimum confidence at runtime, so that I can dynamically control the strictness of the generated rules.
+Acceptance Criteria
+- System prompts the user to enter a value for minimum support before execution.
+- System prompts the user to enter a value for minimum confidence before execution.
+- System validates that the inputs are valid numerical values.
+
+### US-003 Association Rule Mining Algorithm Implementation
+As a System Engine, I want to implement a core association rule mining algorithm (such as Apriori, FP-Growth, or Vertical data format), so that frequent patterns can be mathematically derived from the transaction datasets.
+Acceptance Criteria
+- The algorithm must successfully generate all frequent itemsets that meet or exceed the user-defined minimum support.
+- The algorithm must generate all valid association rules from the frequent itemsets that meet or exceed the minimum confidence.
+
+### US-004 Results Output and Formatting
+As a Data Analyst, I want to view the final frequent itemsets and association rules in a clear, readable format, so that I can easily interpret the data for business recommendations.
+Acceptance Criteria
+- System must output a list of frequent itemsets along with their calculated support values.
+- System must output a list of association rules formatted as {item A} - {item B}.
+- System must display the confidence value for each generated rule (and optionally lift or support).
