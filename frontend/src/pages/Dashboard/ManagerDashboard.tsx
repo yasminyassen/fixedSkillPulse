@@ -359,7 +359,7 @@ function ScoreRingMetric({ label, value, unit = "", description }: { label: stri
           {/* zone tick at 80 */}
           <line x1={m80.x} y1={m80.y} x2={cx + (R - 10) * Math.cos((startAngle + 0.8 * 270) * Math.PI / 180)} y2={cy + (R - 10) * Math.sin((startAngle + 0.8 * 270) * Math.PI / 180)} stroke="rgba(255,255,255,0.35)" strokeWidth="2" strokeLinecap="round" />
           {/* center value */}
-          <text x={cx} y={cy - 6} textAnchor="middle" dominantBaseline="middle" fill={color} fontSize="22" fontWeight="800" fontFamily="'Syne', sans-serif">
+          <text x={cx} y={cy - 6} textAnchor="middle" dominantBaseline="middle" fill={color} fontSize="22" fontWeight="800" fontFamily="'Inter', sans-serif">
             {value === null ? "—" : safe.toFixed(1)}
           </text>
           <text x={cx} y={cy + 16} textAnchor="middle" dominantBaseline="middle" fill="rgba(148,163,184,0.8)" fontSize="11" fontWeight="700">
@@ -399,7 +399,7 @@ function CodeSmellsMetric({ value }: { value: number | null }) {
     <article className="m-smells-card">
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
         <span className="m-label" style={{ marginBottom: 0 }}>Count Of Code Smells</span>
-        <strong style={{ color: smellColor, fontSize: 28, fontFamily: "'Syne', sans-serif", fontWeight: 800, lineHeight: 1 }}>
+        <strong style={{ color: smellColor, fontSize: 28, fontFamily: "'Inter', sans-serif", fontWeight: 800, lineHeight: 1 }}>
           {value === null ? "—" : n.toFixed(0)}
         </strong>
       </div>
@@ -624,12 +624,12 @@ export default function ManagerDashboard() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         .m-page {
           min-height: 100vh; padding: 32px 40px 80px;
           color: var(--text-primary);
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           background: var(--bg-gradient);
         }
         .m-shell { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
@@ -645,7 +645,7 @@ export default function ManagerDashboard() {
         }
         .m-header h1 {
           margin: 0; font-size: 30px; line-height: 1.1; font-weight: 800;
-          font-family: 'Syne', sans-serif; letter-spacing: -0.5px;
+          font-family: 'Inter', sans-serif; letter-spacing: -0.5px;
         }
         .m-header-sub { color: var(--text-muted); margin: 6px 0 0; font-size: 14px; }
         .m-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -663,7 +663,7 @@ export default function ManagerDashboard() {
           background: var(--bg-input, var(--bg-card)); color: var(--text-primary);
           border-radius: 14px; padding: 11px 15px; cursor: pointer;
           display: flex; align-items: center; justify-content: space-between; gap: 14px;
-          font-family: 'DM Sans', system-ui, sans-serif; text-align: left;
+          font-family: 'Inter', system-ui, sans-serif; text-align: left;
           transition: border-color 0.2s, box-shadow 0.2s;
         }
         .m-repo-trigger:hover, .m-repo-trigger.open {
@@ -685,7 +685,7 @@ export default function ManagerDashboard() {
           width: 100%; border: none; cursor: pointer; border-radius: 12px;
           padding: 11px 12px; background: transparent; color: rgba(200,200,220,0.9);
           display: flex; align-items: center; gap: 10px; justify-content: space-between;
-          font-family: 'DM Sans', system-ui, sans-serif; text-align: left;
+          font-family: 'Inter', system-ui, sans-serif; text-align: left;
           transition: background 0.15s, color 0.15s;
         }
         .m-repo-option:hover { background: ${accent}18; color: #fff; }
@@ -707,7 +707,7 @@ export default function ManagerDashboard() {
           display: grid; align-content: center; gap: 8px;
         }
         .m-score-label { color: var(--text-muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; }
-        .m-score-number { font-size: 52px; line-height: 1; font-family: 'Syne', sans-serif; font-weight: 800; }
+        .m-score-number { font-size: 52px; line-height: 1; font-family: 'Inter', sans-serif; font-weight: 800; }
         .m-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
         .m-summary-item {
           border: 1px solid var(--border); border-radius: 14px;
@@ -728,7 +728,7 @@ export default function ManagerDashboard() {
         .m-tab {
           display: inline-flex; align-items: center; gap: 7px;
           padding: 11px 18px; border: none; background: none;
-          color: var(--text-muted); cursor: pointer; font-family: 'DM Sans', system-ui, sans-serif;
+          color: var(--text-muted); cursor: pointer; font-family: 'Inter', system-ui, sans-serif;
           font-size: 13.5px; font-weight: 600; white-space: nowrap;
           border-bottom: 2px solid transparent; margin-bottom: -1px;
           transition: color 0.15s, border-color 0.15s;
@@ -761,7 +761,7 @@ export default function ManagerDashboard() {
         }
         .m-metric-tile:hover { border-color: ${accent}40; transform: translateY(-2px); }
         .m-metric-icon { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
-        .m-metric-value { display: block; font-size: 24px; font-weight: 800; line-height: 1.1; margin: 7px 0 4px; font-family: 'Syne', sans-serif; }
+        .m-metric-value { display: block; font-size: 24px; font-weight: 800; line-height: 1.1; margin: 7px 0 4px; font-family: 'Inter', sans-serif; }
         .m-status {
           display: inline-flex; width: fit-content; border-radius: 999px;
           padding: 3px 9px; font-size: 11px; font-weight: 800;
@@ -777,7 +777,7 @@ export default function ManagerDashboard() {
           background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
           padding: 18px; display: grid; align-content: center; gap: 6px;
         }
-        .m-team-stat-number { font-size: 38px; font-weight: 800; font-family: 'Syne', sans-serif; }
+        .m-team-stat-number { font-size: 38px; font-weight: 800; font-family: 'Inter', sans-serif; }
         .m-highlight {
           background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
           padding: 18px; min-width: 0;
@@ -822,7 +822,7 @@ export default function ManagerDashboard() {
         .m-trend-select {
           border: 1px solid var(--border); background: var(--bg-card);
           color: var(--text-primary); border-radius: 10px; height: 38px; padding: 0 12px;
-          font-weight: 700; font-family: 'DM Sans', system-ui, sans-serif; cursor: pointer;
+          font-weight: 700; font-family: 'Inter', system-ui, sans-serif; cursor: pointer;
         }
 
         /* ── Risks ── */

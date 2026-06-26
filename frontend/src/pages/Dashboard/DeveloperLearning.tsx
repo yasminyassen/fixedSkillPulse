@@ -150,13 +150,13 @@ export default function DeveloperLearning() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         .learning-page {
           min-height: 100vh;
           padding: 36px 40px 80px;
           color: var(--text-primary);
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           background: var(--bg-gradient);
         }
         .learning-shell { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
@@ -186,7 +186,7 @@ export default function DeveloperLearning() {
           background: var(--bg-input); color: var(--text-primary);
           border-radius: 14px; padding: 13px 15px; cursor: pointer;
           display: flex; align-items: center; justify-content: space-between; gap: 14px;
-          font-family: 'DM Sans', system-ui, sans-serif; text-align: left;
+          font-family: 'Inter', system-ui, sans-serif; text-align: left;
           transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
         .repo-trigger:hover, .repo-trigger.open { border-color: ${accent}80; box-shadow: 0 0 0 4px ${accent}12; }
@@ -203,7 +203,7 @@ export default function DeveloperLearning() {
           width: 100%; border: none; cursor: pointer; border-radius: 12px;
           padding: 11px 12px; background: transparent; color: rgba(200,200,220,0.9);
           display: flex; align-items: center; justify-content: space-between; gap: 12px;
-          font-family: 'DM Sans', system-ui, sans-serif; text-align: left;
+          font-family: 'Inter', system-ui, sans-serif; text-align: left;
           transition: background 0.15s, color 0.15s;
         }
         .repo-option:hover { background: rgba(99,102,241,0.15); color: #fff; }
@@ -290,7 +290,7 @@ export default function DeveloperLearning() {
         <div className="learning-shell">
           <header>
             <div className="learning-eyebrow">Learning Radar</div>
-            <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 30, fontWeight: 800, letterSpacing: "-0.6px", margin: "12px 0 6px" }}>
+            <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 30, fontWeight: 800, letterSpacing: "-0.6px", margin: "12px 0 6px" }}>
               Personalized Learning Recommendations
             </h1>
             <p style={{ color: "var(--text-muted)", margin: 0, maxWidth: 760, lineHeight: 1.65, fontSize: 15 }}>
@@ -439,7 +439,7 @@ function RecommendationCard({ item, accent }: { item: LearningRecommendation; ac
           <div className="rec-skill-icon" style={{ color: styles.fg, background: styles.bg, borderColor: styles.border }}>{skillIcon}</div>
           <span className="priority-pill" style={{ color: styles.fg, background: styles.bg, border: `1px solid ${styles.border}`, flexShrink: 0 }}>{priority}</span>
         </div>
-        <h2 style={{ margin: 0, fontFamily: "'Syne', sans-serif", fontSize: 20, letterSpacing: "-0.3px", lineHeight: 1.25 }}>{item.skill || "Learning focus"}</h2>
+        <h2 style={{ margin: 0, fontFamily: "'Inter', sans-serif", fontSize: 20, letterSpacing: "-0.3px", lineHeight: 1.25 }}>{item.skill || "Learning focus"}</h2>
         {item.why_needed && <p style={{ color: "rgba(180,180,210,0.95)", lineHeight: 1.7, margin: 0, fontSize: 14 }}>{item.why_needed}</p>}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>
@@ -511,7 +511,7 @@ function ResourceCard({ resource }: { resource: LearningResource }) {
 function StateCard({ title, text }: { title: string; text: string }) {
   return (
     <section className="empty-state">
-      <h3 style={{ margin: "0 0 6px", color: "var(--text-primary)", fontFamily: "'Syne', sans-serif" }}>{title}</h3>
+      <h3 style={{ margin: "0 0 6px", color: "var(--text-primary)", fontFamily: "'Inter', sans-serif" }}>{title}</h3>
       <p style={{ margin: 0 }}>{text}</p>
     </section>
   );

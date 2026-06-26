@@ -1,80 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* ─── Theme Variables ─────────────────────────────────────── */
 
+:root {
+  --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-heading: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sp-accent: #8b5cf6;
+  --sp-accent-2: #a855f7;
+  --sp-accent-soft: rgba(139, 92, 246, 0.14);
+  --sp-success: #34d399;
+  --sp-warning: #fbbf24;
+  --sp-orange: #fb923c;
+  --sp-danger: #f87171;
+  --sp-radius: 8px;
+}
+
+:root,
 :root[data-theme="dark"] {
-  --bg-base:            #0a0a0f;
-  --bg-sidebar:         rgba(255,255,255,0.02);
-  --bg-card:            rgba(255,255,255,0.025);
-  --bg-card-hover:      rgba(255,255,255,0.04);
-  --bg-input:           rgba(255,255,255,0.04);
-  --bg-input-focus:     rgba(255,255,255,0.06);
-  --bg-nav-active:      rgba(99,102,241,0.18);
-  --bg-nav-hover:       rgba(255,255,255,0.05);
-  --bg-user:            rgba(255,255,255,0.03);
+  --sp-bg-base: #020617;
+  --sp-bg-gradient:
+    radial-gradient(circle at 18% 0%, rgba(139, 92, 246, .18), transparent 32%),
+    radial-gradient(circle at 82% 12%, rgba(52, 211, 153, .08), transparent 26%),
+    linear-gradient(135deg, #020617 0%, #0f172a 46%, #050816 100%);
+  --sp-sidebar-bg: rgba(15, 23, 42, .72);
+  --sp-surface: rgba(15, 23, 42, .78);
+  --sp-surface-strong: rgba(2, 6, 23, .58);
+  --sp-surface-hover: rgba(139, 92, 246, .10);
+  --sp-input-bg: rgba(2, 6, 23, .5);
+  --sp-border: rgba(148, 163, 184, .18);
+  --sp-border-soft: rgba(148, 163, 184, .11);
+  --sp-text: #f8fafc;
+  --sp-text-secondary: #cbd5e1;
+  --sp-text-muted: #94a3b8;
+  --sp-text-faint: #64748b;
+  --sp-shadow: 0 18px 60px rgba(0, 0, 0, .24);
+  --sp-ring-bg: rgba(148, 163, 184, .14);
 
-  --border:             rgba(255,255,255,0.07);
-  --border-hover:       rgba(255,255,255,0.13);
-  --border-sidebar:     rgba(255,255,255,0.06);
-  --border-input:       rgba(255,255,255,0.08);
-
-  --text-primary:       #ffffff;
-  --text-secondary:     rgba(255,255,255,0.55);
-  --text-muted:         rgba(255,255,255,0.35);
-  --text-faint:         rgba(255,255,255,0.25);
-  --text-nav:           rgba(255,255,255,0.45);
-  --text-nav-active:    #ffffff;
-
-  --bg-gradient:
-    radial-gradient(circle at 10% 0%, rgba(99,102,241,0.18), transparent 45%),
-    radial-gradient(circle at 90% 20%, rgba(236,72,153,0.12), transparent 40%),
-    #0a0a0f;
-
-  --shadow-card:        0 18px 50px rgba(0,0,0,0.35);
-  --scrollbar-thumb:    rgba(255,255,255,0.1);
-  --scrollbar-track:    transparent;
-
-  --tooltip-bg:         #0f0f1a;
-  --tooltip-border:     rgba(255,255,255,0.1);
-
+  --bg-base: var(--sp-bg-base);
+  --bg-sidebar: var(--sp-sidebar-bg);
+  --bg-card: var(--sp-surface);
+  --bg-card-hover: var(--sp-surface-hover);
+  --bg-input: var(--sp-input-bg);
+  --bg-input-focus: rgba(2, 6, 23, .62);
+  --bg-nav-active: rgba(139, 92, 246, .18);
+  --bg-nav-hover: rgba(148, 163, 184, .08);
+  --bg-user: rgba(148, 163, 184, .08);
+  --border: var(--sp-border);
+  --border-hover: rgba(167, 139, 250, .45);
+  --border-sidebar: var(--sp-border-soft);
+  --border-input: var(--sp-border);
+  --text-primary: var(--sp-text);
+  --text-secondary: var(--sp-text-secondary);
+  --text-muted: var(--sp-text-muted);
+  --text-faint: var(--sp-text-faint);
+  --text-nav: var(--sp-text-muted);
+  --text-nav-active: var(--sp-text);
+  --bg-gradient: var(--sp-bg-gradient);
+  --shadow-card: var(--sp-shadow);
+  --scrollbar-thumb: rgba(148, 163, 184, .18);
+  --scrollbar-track: transparent;
+  --tooltip-bg: #0f172a;
+  --tooltip-border: var(--sp-border);
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  --bg-base:            #f0f0f5;
-  --bg-sidebar:         rgba(255,255,255,0.9);
-  --bg-card:            rgba(255,255,255,0.85);
-  --bg-card-hover:      rgba(255,255,255,1);
-  --bg-input:           rgba(0,0,0,0.04);
-  --bg-input-focus:     rgba(0,0,0,0.06);
-  --bg-nav-active:      rgba(99,102,241,0.1);
-  --bg-nav-hover:       rgba(0,0,0,0.04);
-  --bg-user:            rgba(0,0,0,0.03);
-
-  --border:             rgba(0,0,0,0.08);
-  --border-hover:       rgba(0,0,0,0.15);
-  --border-sidebar:     rgba(0,0,0,0.07);
-  --border-input:       rgba(0,0,0,0.1);
-
-  --text-primary:       #0a0a0f;
-  --text-secondary:     rgba(0,0,0,0.6);
-  --text-muted:         rgba(0,0,0,0.45);
-  --text-faint:         rgba(0,0,0,0.3);
-  --text-nav:           rgba(0,0,0,0.5);
-  --text-nav-active:    #0a0a0f;
-
-  --bg-gradient:
-    radial-gradient(circle at 10% 0%, rgba(99,102,241,0.07), transparent 45%),
-    radial-gradient(circle at 90% 20%, rgba(236,72,153,0.05), transparent 40%),
-    #f0f0f5;
-
-  --shadow-card:        0 4px 24px rgba(0,0,0,0.08);
-  --scrollbar-thumb:    rgba(0,0,0,0.15);
-  --scrollbar-track:    transparent;
-
-  --tooltip-bg:         #ffffff;
-  --tooltip-border:     rgba(0,0,0,0.1);
-
+  --sp-bg-base: #f7f7fb;
+  --sp-bg-gradient:
+    radial-gradient(circle at 18% 0%, rgba(139, 92, 246, .11), transparent 34%),
+    radial-gradient(circle at 86% 10%, rgba(20, 184, 166, .08), transparent 28%),
+    linear-gradient(135deg, #f8fafc 0%, #f3f4ff 50%, #ffffff 100%);
+  --sp-sidebar-bg: rgba(255, 255, 255, .86);
+  --sp-surface: rgba(255, 255, 255, .86);
+  --sp-surface-strong: rgba(248, 250, 252, .92);
+  --sp-surface-hover: rgba(139, 92, 246, .08);
+  --sp-input-bg: rgba(255, 255, 255, .82);
+  --sp-border: rgba(79, 70, 229, .15);
+  --sp-border-soft: rgba(15, 23, 42, .09);
+  --sp-text: #0f172a;
+  --sp-text-secondary: #334155;
+  --sp-text-muted: #64748b;
+  --sp-text-faint: #94a3b8;
+  --sp-shadow: 0 14px 42px rgba(15, 23, 42, .08);
+  --sp-ring-bg: rgba(100, 116, 139, .16);
+  --bg-input-focus: rgba(255, 255, 255, .96);
+  --scrollbar-thumb: rgba(100, 116, 139, .25);
+  --tooltip-bg: #ffffff;
   color-scheme: light;
 }
 
@@ -86,8 +97,20 @@ body {
   margin: 0;
   background: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: var(--font-body);
+  font-weight: 400;
+  letter-spacing: 0;
   transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+button, input, select, textarea, table {
+  font-family: var(--font-body);
 }
 
 /* ─── Scrollbar ───────────────────────────────────────────── */

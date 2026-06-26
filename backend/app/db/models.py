@@ -60,6 +60,7 @@ class User(Base):
    
     
     analysis_runs = relationship("AnalysisRun", back_populates="user", cascade="all, delete-orphan")
+    recruiter_tasks = relationship("RecruiterTask", back_populates="recruiter", cascade="all, delete-orphan")
     contributor_analysis_summaries = relationship("ContributorAnalysisSummary", back_populates="user", cascade="all, delete-orphan")
 
 class Repository(Base):
@@ -124,16 +125,37 @@ class RepositoryAnalysis(Base):
     last_run = relationship("AnalysisRun")
 
 
+class RecruiterTask(Base):
+    __tablename__ = "recruiter_tasks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recruiter_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String, nullable=False)
+    csv_filename = Column(String, nullable=True)
+    total_candidates = Column(Integer, nullable=False, default=0)
+    valid_count = Column(Integer, nullable=False, default=0)
+    skipped_count = Column(Integer, nullable=False, default=0)
+    status = Column(String, nullable=False, default="pending")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    recruiter = relationship("User", back_populates="recruiter_tasks")
+    candidates = relationship("RecruiterCandidate", back_populates="task")
+
+
 class RecruiterCandidate(Base):
     __tablename__ = "recruiter_candidates"
 
     id = Column(Integer, primary_key=True, index=True)
     analysis_run_id = Column(Integer, ForeignKey("analysis_runs.id"), unique=True, nullable=False)
+    task_id = Column(Integer, ForeignKey("recruiter_tasks.id"), nullable=True, index=True)
     candidate_name = Column(String, nullable=False)
     github_login = Column(String, nullable=True)
+    github_avatar_url = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     analysis_run = relationship("AnalysisRun", back_populates="recruiter_candidate")
+    task = relationship("RecruiterTask", back_populates="candidates")
 class CodeMetrics(Base):
     __tablename__ = "code_metrics"
 

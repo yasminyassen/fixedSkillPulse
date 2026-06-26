@@ -378,13 +378,13 @@ export default function RecruiterProfilePage() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         .rp-page {
           min-height: 100vh;
           background: var(--bg-gradient);
           color: var(--text-primary);
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           padding: 36px 40px 80px;
         }
         .rp-shell {
@@ -403,7 +403,7 @@ export default function RecruiterProfilePage() {
         }
         .rp-title h1 {
           margin: 0 0 4px;
-          font-family: 'Syne', sans-serif;
+          font-family: 'Inter', sans-serif;
           font-size: 26px;
           font-weight: 800;
           line-height: 1.15;
@@ -536,7 +536,7 @@ export default function RecruiterProfilePage() {
           color: var(--text-primary);
           outline: 0;
           padding: 0 12px;
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           font-size: 13px;
           box-sizing: border-box;
           text-transform: none;
@@ -586,7 +586,7 @@ export default function RecruiterProfilePage() {
         }
         .rp-section-title,
         .rp-panel-head h2 {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Inter', sans-serif;
           font-size: 18px;
           font-weight: 800;
           color: var(--text-primary);
@@ -761,7 +761,7 @@ export default function RecruiterProfilePage() {
           background: var(--bg-card);
           color: var(--text-secondary);
           padding: 0 16px;
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           font-size: 13px;
           font-weight: 700;
           cursor: pointer;

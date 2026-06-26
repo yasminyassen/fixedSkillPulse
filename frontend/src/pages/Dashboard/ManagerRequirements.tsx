@@ -151,7 +151,7 @@ function RequirementFormModal({
         <div style={{ padding: "22px 24px", borderBottom: "1px solid rgba(255,255,255,0.08)", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
           <div>
             <div style={{ color: accent, fontSize: 11, fontWeight: 900, letterSpacing: ".8px", textTransform: "uppercase", marginBottom: 7 }}>Manual requirement</div>
-            <h2 style={{ margin: 0, color: "white", fontFamily: "'Syne', sans-serif", fontSize: 22 }}>Add Requirement</h2>
+            <h2 style={{ margin: 0, color: "white", fontFamily: "'Inter', sans-serif", fontSize: 22 }}>Add Requirement</h2>
             <p style={{ margin: "7px 0 0", color: "rgba(255,255,255,0.5)", fontSize: 13 }}>Create a user story, criteria, implementation tasks, and optional assignments.</p>
           </div>
           <button className="rq-btn-ghost" onClick={onClose}>Cancel</button>
@@ -314,7 +314,7 @@ function StoryDetailsDrawer({
         <button className="rq-btn-ghost" onClick={onClose} style={{ marginBottom: 18 }}>Close</button>
         <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "flex-start" }}>
           <div>
-            <h2 style={{ margin: 0, color: "white", fontFamily: "'Syne', sans-serif", fontSize: 22 }}>Story Details</h2>
+            <h2 style={{ margin: 0, color: "white", fontFamily: "'Inter', sans-serif", fontSize: 22 }}>Story Details</h2>
             <div style={{ color: accent, fontSize: 12, fontWeight: 900, margin: "8px 0 16px" }}>{story.story_code}</div>
           </div>
           {role === "manager" && <button className="rq-btn-ghost" style={{ color: "#f87171" }} onClick={() => onStoryDelete(story)}><Trash2 size={13} /> Delete Requirement</button>}
@@ -1011,12 +1011,12 @@ export default function RequirementsPage() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        .rq-input,.rq-select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:white;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:8px 10px;box-sizing:border-box}
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .rq-input,.rq-select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:white;font-family:'Inter',sans-serif;font-size:13px;outline:none;padding:8px 10px;box-sizing:border-box}
         .rq-input:focus,.rq-select:focus{border-color:${accent}80;background:rgba(255,255,255,0.06)}
         .rq-select option{background:#1a1a2e;color:white}
-        .rq-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:rgba(255,255,255,0.7);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
-        .rq-btn-primary{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;background:linear-gradient(135deg,${accent},#ec4899);border:none;border-radius:9px;color:white;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
+        .rq-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:9px;color:rgba(255,255,255,0.7);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
+        .rq-btn-primary{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;background:linear-gradient(135deg,${accent},#ec4899);border:none;border-radius:9px;color:white;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
         .rq-btn-primary:disabled{opacity:.45;cursor:not-allowed}
         .rq-panel{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px}
         .rq-table{width:100%;border-collapse:separate;border-spacing:0 8px}
@@ -1049,9 +1049,9 @@ export default function RequirementsPage() {
           onSubmit={createRequirement}
         />
       )}
-      <div style={{ padding: "32px 36px 80px", maxWidth: 1280, fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ padding: "32px 36px 80px", maxWidth: 1280, fontFamily: "'Inter', sans-serif" }}>
         <div style={{ marginBottom: 24 }}>
-          <h1 style={{ margin: "0 0 6px", color: "white", fontFamily: "'Syne', sans-serif", fontSize: 26 }}>Requirements Workspace</h1>
+          <h1 style={{ margin: "0 0 6px", color: "white", fontFamily: "'Inter', sans-serif", fontSize: 26 }}>Requirements Workspace</h1>
           <p style={{ margin: 0, color: "rgba(255,255,255,0.38)", fontSize: 14 }}>
             {role === "manager" ? "Manage confirmed requirements, assignments, and coverage evidence." : "Track coverage for your assigned stories and tasks."}
           </p>

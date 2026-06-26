@@ -7,9 +7,10 @@ import tempfile
 import uuid
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
-from fastapi import Request, APIRouter, Depends, HTTPException, BackgroundTasks, UploadFile, File, Form
+from fastapi import Request, APIRouter, Depends, HTTPException, BackgroundTasks, UploadFile, File, Form, Query
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
 
 from typing import Optional
 from pydantic import BaseModel
@@ -34,6 +35,7 @@ from app.db.models import (
     User,
     UserRole,
     RecruiterCandidate,
+    RecruiterTask,
     RepositoryAnalysis,
     RepositoryContributor,
 )
@@ -68,12 +70,19 @@ from app.services.security_service import (
     group_findings_by_severity_and_file,
 )
 from app.services.learning_recommendations import build_learning_recommendations
+from app.services.llm_client import (
+    _fallback_recruiter_candidate_insights,
+    generate_recruiter_candidate_insights,
+)
 from app.services.sonarqube_score_service import (
     build_skill_score_fields,
     build_sonar_dashboard_payload,
     build_sonar_repo_summary,
+    compute_sonar_health_score,
+    get_coverage_metadata,
     get_sonar_measure_map,
     get_sonar_payload,
+    get_sonar_quality_gate_status,
 )
 
 
@@ -90,6 +99,11 @@ class RepoRequest(BaseModel):
 class RecruiterCandidateRow(BaseModel):
     candidate_name: str
     github_login: str
+    github_avatar_url: str | None = None
+    repo_name: str | None = None
+    repo_url: str | None = None
+    task_id: int | None = None
+    task_title: str | None = None
     skill_score: float | int | None = None
     skill_score_level: str = "Unavailable"
     sonar_health_score: float | None = None
@@ -108,6 +122,106 @@ class RecruiterCandidateRow(BaseModel):
     repo_count: int
     contribution_count: int
     run_id: int
+    analysis_status: str | None = None
+    completed_at: datetime | None = None
+
+
+class RecruiterTaskResponse(BaseModel):
+    id: int
+    title: str
+    csv_filename: str | None = None
+    total_candidates: int
+    valid_count: int
+    skipped_count: int
+    status: str
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    analyzed_count: int
+    average_skill_score: float | None = None
+
+
+class RecruiterCandidateDashboardRow(BaseModel):
+    candidate_name: str
+    github_login: str
+    github_avatar_url: str | None = None
+    repo_name: str
+    repo_url: str | None = None
+    task_id: int | None = None
+    task_title: str | None = None
+    skill_score: float | int | None = None
+    skill_score_level: str = "Unavailable"
+    sonar_health_score: float | int | None = None
+    sonar_state: str = "sonar_unavailable"
+    security: float | int | None = None
+    quality_gate: str | None = None
+    bugs: float | int | None = None
+    code_smells: float | int | None = None
+    coverage: float | int | None = None
+    duplication_percentage: float | int | None = None
+    cognitive_complexity: float | int | None = None
+    reliability_rating: str | None = None
+    maintainability_rating: str | None = None
+    technical_debt_minutes: float | int | None = None
+    lines_of_code: float | int | None = None
+    repo_count: int
+    contribution_count: int
+    run_id: int
+    analysis_status: str
+    completed_at: datetime | None = None
+
+
+class DashboardOverview(BaseModel):
+    total_candidates: int
+    average_skill_score: float | None = None
+    average_sonar_health: float | None = None
+    average_security_score: float | None = None
+    passed_quality_gate_percentage: float | int
+    high_priority_candidates: int
+
+
+class TaskDistribution(BaseModel):
+    excellent: int
+    good: int
+    fair: int
+    poor: int
+
+
+class RiskHeatmapRow(BaseModel):
+    candidate_name: str
+    code_quality: str
+    security: str
+    maintainability: str
+    testing: str
+    reliability: str
+
+
+class RecruiterCandidateInsightResponse(BaseModel):
+    candidate_name: str
+    github_login: str
+    github_avatar_url: str | None = None
+    run_id: int
+    repo_name: str
+    task_title: str | None = None
+    skill_score: float | int | None = None
+    sonar_health_score: float | int | None = None
+    security: float | int | None = None
+    coverage: float | int | None = None
+    bugs: float | int | None = None
+    summary: str
+    strengths: list[str]
+    areas_to_improve: list[str]
+    recommendation: str
+    recommendation_reason: str | None = None
+    risk_level: str
+    generated_by: str
+    generated_at: datetime | str | None = None
+
+
+class RecruiterDashboardSummaryResponse(BaseModel):
+    overview: DashboardOverview
+    task_distribution: TaskDistribution
+    risk_heatmap: list[RiskHeatmapRow]
+    top_candidate: RecruiterCandidateInsightResponse | None = None
 
 
 LEARNING_RECOMMENDATION_KEYS = {
@@ -338,6 +452,57 @@ def _security_status(score: float | None) -> str:
     return "🔴 Critical Risk"
 
 
+def _security_status_label(score: float | None) -> str:
+    if score is None:
+        return "Unavailable"
+    if score >= 95:
+        return "Excellent"
+    if score >= 80:
+        return "Good"
+    if score >= 60:
+        return "Moderate Risk"
+    if score >= 40:
+        return "High Risk"
+    return "Critical Risk"
+
+
+def _security_risk_level_from_score(score: float | int | None) -> str:
+    numeric = _safe_number(score)
+    if numeric is None:
+        return "Unavailable"
+    if numeric >= 90:
+        return "Low"
+    if numeric >= 70:
+        return "Medium"
+    if numeric >= 50:
+        return "High"
+    return "Critical"
+
+
+def _security_breakdown_for_run(db: Session, run_id: int, security_score: object | None) -> dict:
+    findings = db.query(SecurityFinding).filter(SecurityFinding.analysis_run_id == run_id).all()
+    counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    for finding in findings:
+        severity = str(finding.severity or "").upper()
+        if severity in {"CRITICAL", "BLOCKER"}:
+            counts["critical"] += 1
+        elif severity in {"HIGH", "MAJOR"}:
+            counts["high"] += 1
+        elif severity == "MEDIUM":
+            counts["medium"] += 1
+        else:
+            counts["low"] += 1
+
+    rounded_score = _round_metric(security_score)
+    return {
+        "score": rounded_score,
+        "status": _security_status_label(float(rounded_score) if rounded_score is not None else None),
+        "risk_level": _security_risk_level_from_score(rounded_score),
+        "findings_count": len(findings),
+        "breakdown": counts,
+    }
+
+
 def _numeric_measure_map(measures: object) -> dict:
     if not isinstance(measures, dict):
         return {}
@@ -363,6 +528,401 @@ def _skill_score_fields(
         sonar_health_score=sonar_health_score,
         security_score=security_score,
     )
+
+
+safe_number = _safe_number
+avg_present = _avg_present
+rating_label = _rating_label
+
+
+def _round_metric(value: object) -> float | int | None:
+    numeric = _safe_number(value)
+    if numeric is None:
+        return None
+    return round(float(numeric), 2)
+
+
+def _sonar_summary_for_dashboard(
+    run: AnalysisRun,
+    summary: SonarAnalysisSummary | None,
+) -> dict:
+    if summary:
+        measures = _numeric_measure_map(summary.measures)
+        coverage_value = measures.get("coverage")
+        return {
+            "sonar_health_score": _round_metric(summary.sonar_health_score),
+            "sonar_state": "ready" if summary.sonar_health_score is not None else "sonar_unavailable",
+            "quality_gate": summary.quality_gate,
+            "bugs": _safe_number(measures.get("bugs")),
+            "code_smells": _safe_number(measures.get("code_smells")),
+            "coverage": _safe_number(coverage_value),
+            "duplication_percentage": _safe_number(measures.get("duplicated_lines_density")),
+            "cognitive_complexity": _safe_number(measures.get("cognitive_complexity")),
+            "reliability_rating": _rating_label(measures.get("reliability_rating")),
+            "maintainability_rating": _rating_label(measures.get("sqale_rating")),
+            "technical_debt_minutes": _safe_number(measures.get("sqale_index")),
+            "lines_of_code": _safe_number(measures.get("ncloc")),
+        }
+
+    sonar_payload = get_sonar_payload(run)
+    measures = get_sonar_measure_map(sonar_payload)
+    coverage_meta = get_coverage_metadata(sonar_payload)
+    sonar_health_score = compute_sonar_health_score(sonar_payload)
+    return {
+        "sonar_health_score": _round_metric(sonar_health_score),
+        "sonar_state": "ready" if sonar_health_score is not None else "sonar_unavailable",
+        "quality_gate": get_sonar_quality_gate_status(sonar_payload),
+        "bugs": _safe_number(measures.get("bugs")) if sonar_payload else None,
+        "code_smells": _safe_number(measures.get("code_smells")) if sonar_payload else None,
+        "coverage": _safe_number(measures.get("coverage")) if sonar_payload and coverage_meta.get("available") else None,
+        "duplication_percentage": _safe_number(measures.get("duplicated_lines_density")) if sonar_payload else None,
+        "cognitive_complexity": _safe_number(measures.get("cognitive_complexity")) if sonar_payload else None,
+        "reliability_rating": _rating_label(measures.get("reliability_rating")) if sonar_payload else None,
+        "maintainability_rating": _rating_label(measures.get("sqale_rating")) if sonar_payload else None,
+        "technical_debt_minutes": _safe_number(measures.get("sqale_index")) if sonar_payload else None,
+        "lines_of_code": _safe_number(measures.get("ncloc")) if sonar_payload else None,
+    }
+
+
+def build_candidate_dashboard_row(
+    run: AnalysisRun,
+    repo: Repository,
+    score: SkillScore,
+    candidate: RecruiterCandidate,
+    sonar_summary: SonarAnalysisSummary | None = None,
+    task: RecruiterTask | None = None,
+    repo_count: int = 1,
+    contribution_count: int = 1,
+) -> dict:
+    sonar = _sonar_summary_for_dashboard(run, sonar_summary)
+    security_score = _round_metric(getattr(score, "security_awareness_score", None))
+    skill_fields = _skill_score_fields(
+        score,
+        sonar_health_score=sonar["sonar_health_score"],
+        security_score=security_score,
+    )
+    return {
+        "candidate_name": candidate.candidate_name,
+        "github_login": candidate.github_login or "",
+        "github_avatar_url": candidate.github_avatar_url,
+        "repo_name": repo.name or repo.full_name or "",
+        "repo_url": repo.url,
+        "task_id": candidate.task_id,
+        "task_title": task.title if task else None,
+        "skill_score": _round_metric(skill_fields.get("skill_score")),
+        "skill_score_level": skill_fields.get("skill_score_level") or "Unavailable",
+        "sonar_health_score": sonar["sonar_health_score"],
+        "sonar_state": sonar["sonar_state"],
+        "security": security_score,
+        "quality_gate": sonar["quality_gate"],
+        "bugs": sonar["bugs"],
+        "code_smells": sonar["code_smells"],
+        "coverage": sonar["coverage"],
+        "duplication_percentage": sonar["duplication_percentage"],
+        "cognitive_complexity": sonar["cognitive_complexity"],
+        "reliability_rating": sonar["reliability_rating"],
+        "maintainability_rating": sonar["maintainability_rating"],
+        "technical_debt_minutes": sonar["technical_debt_minutes"],
+        "lines_of_code": sonar["lines_of_code"],
+        "repo_count": int(repo_count or 1),
+        "contribution_count": int(contribution_count or 0),
+        "run_id": run.id,
+        "analysis_status": run.status,
+        "completed_at": run.completed_at,
+    }
+
+
+def _candidate_identity(row: dict) -> str:
+    return str(row.get("github_login") or row.get("candidate_name") or row.get("run_id") or "").strip().lower()
+
+
+def _rating_rank(label: object) -> int | None:
+    text = _rating_label(label)
+    if not text:
+        return None
+    return {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5}.get(str(text).upper())
+
+
+def _risk_from_score(score: object, medium: float, high: float, critical: float) -> str:
+    numeric = _safe_number(score)
+    if numeric is None:
+        return "medium"
+    value = float(numeric)
+    if value < critical:
+        return "critical"
+    if value < high:
+        return "high"
+    if value < medium:
+        return "medium"
+    return "low"
+
+
+def _code_quality_risk(row: dict) -> str:
+    bugs = _safe_number(row.get("bugs")) or 0
+    smells = _safe_number(row.get("code_smells")) or 0
+    score = _safe_number(row.get("skill_score")) or 0
+    if bugs > 10 or smells > 100 or score < 50:
+        return "critical"
+    if bugs > 5 or smells > 50 or score < 60:
+        return "high"
+    if bugs > 2 or smells > 20 or score < 75:
+        return "medium"
+    return "low"
+
+
+def _security_risk(row: dict) -> str:
+    return _risk_from_score(row.get("security"), medium=85, high=70, critical=50)
+
+
+def _maintainability_risk(row: dict) -> str:
+    rating = _rating_rank(row.get("maintainability_rating"))
+    debt = _safe_number(row.get("technical_debt_minutes")) or 0
+    duplication = _safe_number(row.get("duplication_percentage")) or 0
+    if rating and rating >= 5 or debt > 240 or duplication > 15:
+        return "critical"
+    if rating and rating >= 4 or debt > 60 or duplication > 10:
+        return "high"
+    if rating and rating >= 3 or debt > 30 or duplication > 5:
+        return "medium"
+    return "low"
+
+
+def _testing_risk(row: dict) -> str:
+    return _risk_from_score(row.get("coverage"), medium=80, high=60, critical=40)
+
+
+def _reliability_risk(row: dict) -> str:
+    rating = _rating_rank(row.get("reliability_rating"))
+    bugs = _safe_number(row.get("bugs")) or 0
+    if rating and rating >= 5 or bugs > 10:
+        return "critical"
+    if rating and rating >= 4 or bugs > 5:
+        return "high"
+    if rating and rating >= 3 or bugs > 2:
+        return "medium"
+    return "low"
+
+
+def build_risk_heatmap(rows: list[dict]) -> list[dict]:
+    return [
+        {
+            "candidate_name": row["candidate_name"],
+            "code_quality": _code_quality_risk(row),
+            "security": _security_risk(row),
+            "maintainability": _maintainability_risk(row),
+            "testing": _testing_risk(row),
+            "reliability": _reliability_risk(row),
+        }
+        for row in rows
+    ]
+
+
+def build_task_distribution(rows: list[dict]) -> dict:
+    distribution = {"excellent": 0, "good": 0, "fair": 0, "poor": 0}
+    for row in rows:
+        score = _safe_number(row.get("skill_score"))
+        if score is None or score < 60:
+            distribution["poor"] += 1
+        elif score < 70:
+            distribution["fair"] += 1
+        elif score < 90:
+            distribution["good"] += 1
+        else:
+            distribution["excellent"] += 1
+    return distribution
+
+
+def _overview(rows: list[dict], current_user: User) -> dict:
+    gates = [str(row.get("quality_gate") or "").upper() for row in rows if row.get("quality_gate")]
+    pass_count = len([gate for gate in gates if gate in {"PASS", "OK", "PASSED"}])
+    threshold = _safe_number(getattr(current_user, "high_priority_threshold", None))
+    threshold = float(threshold) if threshold is not None else 75.0
+    return {
+        "total_candidates": len(rows),
+        "average_skill_score": _avg_present([row.get("skill_score") for row in rows]),
+        "average_sonar_health": _avg_present([row.get("sonar_health_score") for row in rows]),
+        "average_security_score": _avg_present([row.get("security") for row in rows]),
+        "passed_quality_gate_percentage": round((pass_count / len(gates)) * 100, 2) if gates else 0,
+        "high_priority_candidates": len([
+            row for row in rows
+            if (_safe_number(row.get("skill_score")) is not None and float(_safe_number(row.get("skill_score"))) >= threshold)
+        ]),
+    }
+
+
+def _summary_candidate_from_row(row: dict, cached: dict | None = None) -> dict:
+    insight = (cached or {}).get("insight") if isinstance(cached, dict) else None
+    generated_at = (cached or {}).get("generated_at") if isinstance(cached, dict) else None
+    model_source = (cached or {}).get("model_source") if isinstance(cached, dict) else None
+    if not isinstance(insight, dict):
+        insight = {
+            "summary": f"{row['candidate_name']} demonstrates task performance based on the available analysis metrics.",
+            "strengths": ["Completed repository analysis"],
+            "areas_to_improve": ["Monitor technical debt"],
+            "recommendation": "interview" if (_safe_number(row.get("skill_score")) or 0) >= 75 else "review_required",
+            "recommendation_reason": "Deterministic summary based on available dashboard metrics.",
+            "risk_level": max(
+                [_code_quality_risk(row), _security_risk(row), _maintainability_risk(row), _testing_risk(row), _reliability_risk(row)],
+                key={"low": 0, "medium": 1, "high": 2, "critical": 3}.get,
+            ),
+        }
+        generated_by = "summary"
+    else:
+        generated_by = "fallback" if model_source == "fallback" else "llm"
+
+    return {
+        "candidate_name": row["candidate_name"],
+        "github_login": row.get("github_login") or "",
+        "github_avatar_url": row.get("github_avatar_url"),
+        "run_id": row["run_id"],
+        "repo_name": row["repo_name"],
+        "task_title": row.get("task_title"),
+        "skill_score": row.get("skill_score"),
+        "sonar_health_score": row.get("sonar_health_score"),
+        "security": row.get("security"),
+        "coverage": row.get("coverage"),
+        "bugs": row.get("bugs"),
+        "summary": insight.get("summary") or "",
+        "strengths": insight.get("strengths") or [],
+        "areas_to_improve": insight.get("areas_to_improve") or [],
+        "recommendation": insight.get("recommendation") or "review_required",
+        "recommendation_reason": insight.get("recommendation_reason"),
+        "risk_level": insight.get("risk_level") or "medium",
+        "generated_by": generated_by,
+        "generated_at": generated_at,
+    }
+
+
+def build_dashboard_summary(rows: list[dict], current_user: User, runs_by_id: dict[int, AnalysisRun] | None = None) -> dict:
+    top_row = None
+    scored_rows = [row for row in rows if _safe_number(row.get("skill_score")) is not None]
+    if scored_rows:
+        top_row = max(scored_rows, key=lambda row: float(_safe_number(row.get("skill_score")) or 0))
+
+    cached = None
+    if top_row and runs_by_id:
+        cached = get_cached_recruiter_candidate_insight(runs_by_id.get(top_row["run_id"]))
+
+    return {
+        "overview": _overview(rows, current_user),
+        "task_distribution": build_task_distribution(rows),
+        "risk_heatmap": build_risk_heatmap(rows),
+        "top_candidate": _summary_candidate_from_row(top_row, cached) if top_row else None,
+    }
+
+
+def _compact_sonar_issue(row: SonarIssue) -> dict:
+    return {
+        "type": row.type,
+        "severity": row.severity,
+        "file_path": row.file_path,
+        "line": row.line,
+        "rule": row.rule,
+        "message": row.message,
+    }
+
+
+def _compact_security_finding(row: SecurityFinding) -> dict:
+    return {
+        "tool": row.tool,
+        "rule": row.rule,
+        "cwe": row.cwe,
+        "file_path": row.file_path,
+        "severity": row.severity,
+        "description": row.description,
+        "line_number": row.line_number,
+        "owasp_category": row.owasp_category,
+    }
+
+
+def _compact_risky_file(row: SonarFileMeasure) -> dict:
+    return {
+        "file_path": row.file_path,
+        "coverage": _safe_number(row.coverage),
+        "duplicated_lines_density": _safe_number(row.duplicated_lines_density),
+        "ncloc": _safe_number(row.ncloc),
+        "complexity": _safe_number(row.complexity),
+        "cognitive_complexity": _safe_number(row.cognitive_complexity),
+    }
+
+
+def build_recruiter_candidate_llm_payload(
+    row: dict,
+    run: AnalysisRun,
+    repo: Repository,
+    candidate: RecruiterCandidate,
+    task: RecruiterTask | None,
+    sonar_issues: list[SonarIssue],
+    security_findings: list[SecurityFinding],
+    risky_files: list[SonarFileMeasure],
+) -> dict:
+    return {
+        "candidate": {
+            "name": candidate.candidate_name,
+            "github_login": candidate.github_login,
+            "task_title": task.title if task else None,
+        },
+        "repository": {
+            "name": repo.name,
+            "full_name": repo.full_name,
+            "url": repo.url,
+            "branch": run.branch,
+        },
+        "scores": {
+            "skill_score": row.get("skill_score"),
+            "skill_score_level": row.get("skill_score_level"),
+            "sonar_health_score": row.get("sonar_health_score"),
+            "security_score": row.get("security"),
+            "quality_gate": row.get("quality_gate"),
+        },
+        "sonar_metrics": {
+            "bugs": row.get("bugs"),
+            "code_smells": row.get("code_smells"),
+            "coverage": row.get("coverage"),
+            "duplication_percentage": row.get("duplication_percentage"),
+            "cognitive_complexity": row.get("cognitive_complexity"),
+            "technical_debt_minutes": row.get("technical_debt_minutes"),
+            "lines_of_code": row.get("lines_of_code"),
+            "reliability_rating": row.get("reliability_rating"),
+            "maintainability_rating": row.get("maintainability_rating"),
+        },
+        "top_sonar_issues": [_compact_sonar_issue(item) for item in sonar_issues[:10]],
+        "top_security_findings": [_compact_security_finding(item) for item in security_findings[:10]],
+        "risky_files": [_compact_risky_file(item) for item in risky_files[:10]],
+    }
+
+
+def get_cached_recruiter_candidate_insight(run: AnalysisRun | None) -> dict | None:
+    ai_insights = getattr(run, "ai_insights", None)
+    if not isinstance(ai_insights, dict):
+        return None
+    cached = ai_insights.get("recruiter_candidate_insight")
+    if not isinstance(cached, dict):
+        return None
+    insight = cached.get("insight")
+    if not isinstance(insight, dict):
+        return None
+    return cached
+
+
+def set_cached_recruiter_candidate_insight(
+    run: AnalysisRun,
+    insight: dict,
+    model_source: str,
+) -> dict:
+    generated_at = datetime.now(timezone.utc).isoformat()
+    cache_payload = {
+        "generated_at": generated_at,
+        "model_source": model_source,
+        "payload_version": 1,
+        "insight": insight,
+    }
+    ai_insights = run.ai_insights if isinstance(run.ai_insights, dict) else {}
+    ai_insights = dict(ai_insights)
+    ai_insights["recruiter_candidate_insight"] = cache_payload
+    run.ai_insights = ai_insights
+    flag_modified(run, "ai_insights")
+    return cache_payload
 
 
 def _without_removed_skill_score_outputs(ai_insights: object) -> object:
@@ -1001,42 +1561,58 @@ async def get_analysis_history(
     return {"history": result}
 
 
-@router.get("/recruiter/candidates", response_model=list[RecruiterCandidateRow])
-async def get_recruiter_candidates(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_role(["recruiter"])),
-):
-    rows = (
-        db.query(AnalysisRun, Repository, SkillScore, RecruiterCandidate)
+def _verify_recruiter_task(
+    db: Session,
+    current_user: User,
+    task_id: int | None,
+) -> RecruiterTask | None:
+    if task_id is None:
+        return None
+    task = (
+        db.query(RecruiterTask)
+        .filter(
+            RecruiterTask.id == task_id,
+            RecruiterTask.recruiter_id == current_user.id,
+        )
+        .first()
+    )
+    if not task:
+        raise HTTPException(status_code=404, detail="Recruiter task not found")
+    return task
+
+
+def _candidate_query_rows(
+    db: Session,
+    current_user: User,
+    task_id: int | None = None,
+) -> list[tuple[AnalysisRun, Repository, SkillScore, RecruiterCandidate, SonarAnalysisSummary | None, RecruiterTask | None]]:
+    _verify_recruiter_task(db, current_user, task_id)
+    query = (
+        db.query(AnalysisRun, Repository, SkillScore, RecruiterCandidate, SonarAnalysisSummary, RecruiterTask)
         .join(Repository, AnalysisRun.repository_id == Repository.id)
         .join(
             SkillScore,
             (SkillScore.analysis_run_id == AnalysisRun.id) & (SkillScore.user_id == current_user.id),
         )
         .join(RecruiterCandidate, RecruiterCandidate.analysis_run_id == AnalysisRun.id)
-        .filter(AnalysisRun.user_id == current_user.id)
-        .filter(AnalysisRun.status == "completed")
-        .all()
+        .outerjoin(SonarAnalysisSummary, SonarAnalysisSummary.analysis_run_id == AnalysisRun.id)
+        .outerjoin(RecruiterTask, RecruiterTask.id == RecruiterCandidate.task_id)
+        .filter(
+            AnalysisRun.user_id == current_user.id,
+            SkillScore.user_id == current_user.id,
+            AnalysisRun.status == "completed",
+        )
     )
+    if task_id is not None:
+        query = query.filter(RecruiterCandidate.task_id == task_id)
+    return query.all()
 
-    latest_by_candidate: dict[str, tuple[AnalysisRun, Repository, SkillScore, RecruiterCandidate]] = {}
-    for run, repo, score, candidate in rows:
-        candidate_key = (candidate.github_login or candidate.candidate_name or "").strip().lower()
-        if not candidate_key:
-            candidate_key = str(run.id)
 
-        existing = latest_by_candidate.get(candidate_key)
-        if existing:
-            existing_run = existing[0]
-            existing_time = _run_sort_time(existing_run)
-            incoming_time = _run_sort_time(run)
-            if existing_time >= incoming_time:
-                continue
-
-        latest_by_candidate[candidate_key] = (run, repo, score, candidate)
-
-    latest_rows = list(latest_by_candidate.values())
-    run_ids = [run.id for run, _, _, _ in latest_rows]
+def _dashboard_rows_from_query(
+    query_rows: list[tuple[AnalysisRun, Repository, SkillScore, RecruiterCandidate, SonarAnalysisSummary | None, RecruiterTask | None]],
+    db: Session,
+) -> list[dict]:
+    run_ids = [run.id for run, *_ in query_rows]
     loc_by_run = {}
     if run_ids:
         loc_by_run = dict(
@@ -1049,48 +1625,332 @@ async def get_recruiter_candidates(
             .all()
         )
 
-    repo_counts = Counter(candidate.candidate_name for _, _, _, candidate in rows)
-
-    response: list[RecruiterCandidateRow] = []
-    for run, _, score, candidate in sorted(
-        latest_rows,
-        key=lambda item: _skill_score_fields(
-            item[2],
-            sonar_health_score=build_sonar_repo_summary(item[0]).get("sonar_health_score"),
-            security_score=item[2].security_awareness_score,
-        ).get("skill_score") or -1,
-        reverse=True,
-    ):
-        sonar_summary = build_sonar_repo_summary(run)
-        skill_fields = _skill_score_fields(
+    repo_counts = Counter(candidate.candidate_name for _, _, _, candidate, _, _ in query_rows)
+    rows = [
+        build_candidate_dashboard_row(
+            run,
+            repo,
             score,
-            sonar_health_score=sonar_summary["sonar_health_score"],
-            security_score=score.security_awareness_score,
-        )
-        response.append(RecruiterCandidateRow(
-            candidate_name=candidate.candidate_name,
-            github_login=candidate.github_login or "",
-            skill_score=skill_fields["skill_score"],
-            skill_score_level=skill_fields["skill_score_level"],
-            sonar_health_score=sonar_summary["sonar_health_score"],
-            sonar_state=sonar_summary["sonar_state"],
-            quality_gate=sonar_summary["quality_gate"],
-            bugs=sonar_summary["bugs"],
-            code_smells=sonar_summary["code_smells"],
-            coverage=sonar_summary["coverage"],
-            duplication_percentage=sonar_summary["duplication_percentage"],
-            cognitive_complexity=sonar_summary["cognitive_complexity"],
-            reliability_rating=sonar_summary["reliability_rating"],
-            maintainability_rating=sonar_summary["maintainability_rating"],
-            technical_debt_minutes=sonar_summary["technical_debt_minutes"],
-            lines_of_code=sonar_summary["lines_of_code"],
-            security=float(score.security_awareness_score or 0.0),
+            candidate,
+            sonar_summary,
+            task,
             repo_count=int(repo_counts.get(candidate.candidate_name, 1)),
             contribution_count=int(loc_by_run.get(run.id, 0)),
-            run_id=run.id,
-        ))
+        )
+        for run, repo, score, candidate, sonar_summary, task in query_rows
+    ]
+    return rows
 
+
+def _apply_candidate_filters(
+    rows: list[dict],
+    search: str | None,
+    min_skill_score: float | None,
+    max_skill_score: float | None,
+    min_sonar: float | None,
+    max_sonar: float | None,
+    min_security: float | None,
+    max_security: float | None,
+    min_coverage: float | None,
+    max_coverage: float | None,
+    quality_gate: str | None,
+    max_bugs: int | None,
+    max_technical_debt_minutes: float | None,
+) -> list[dict]:
+    def between(value: object, minimum: float | None, maximum: float | None) -> bool:
+        numeric = _safe_number(value)
+        if numeric is None:
+            return minimum is None and maximum is None
+        if minimum is not None and float(numeric) < minimum:
+            return False
+        if maximum is not None and float(numeric) > maximum:
+            return False
+        return True
+
+    filtered = rows
+    if search:
+        needle = search.strip().lower()
+        filtered = [
+            row for row in filtered
+            if needle in " ".join([
+                str(row.get("candidate_name") or ""),
+                str(row.get("github_login") or ""),
+                str(row.get("repo_name") or ""),
+                str(row.get("repo_url") or ""),
+                str(row.get("task_title") or ""),
+            ]).lower()
+        ]
+    if quality_gate:
+        gate = quality_gate.strip().upper()
+        filtered = [row for row in filtered if str(row.get("quality_gate") or "").upper() == gate]
+
+    return [
+        row for row in filtered
+        if between(row.get("skill_score"), min_skill_score, max_skill_score)
+        and between(row.get("sonar_health_score"), min_sonar, max_sonar)
+        and between(row.get("security"), min_security, max_security)
+        and between(row.get("coverage"), min_coverage, max_coverage)
+        and (max_bugs is None or ((_safe_number(row.get("bugs")) or 0) <= max_bugs))
+        and (
+            max_technical_debt_minutes is None
+            or ((_safe_number(row.get("technical_debt_minutes")) or 0) <= max_technical_debt_minutes)
+        )
+    ]
+
+
+def _sort_candidate_rows(rows: list[dict], sort_by: str, sort_dir: str) -> list[dict]:
+    sort_map = {
+        "skill_score": "skill_score",
+        "sonar_health_score": "sonar_health_score",
+        "security": "security",
+        "coverage": "coverage",
+        "bugs": "bugs",
+        "code_smells": "code_smells",
+        "technical_debt_minutes": "technical_debt_minutes",
+        "completed_at": "completed_at",
+    }
+    if sort_by not in sort_map:
+        raise HTTPException(status_code=400, detail="Invalid sort_by")
+    if sort_dir not in {"asc", "desc"}:
+        raise HTTPException(status_code=400, detail="Invalid sort_dir")
+
+    key_name = sort_map[sort_by]
+
+    def sort_key(row: dict):
+        value = row.get(key_name)
+        if key_name == "completed_at":
+            return value or MIN_AWARE_DATETIME
+        numeric = _safe_number(value)
+        return float(numeric) if numeric is not None else -1.0
+
+    return sorted(rows, key=sort_key, reverse=(sort_dir == "desc"))
+
+
+@router.get("/recruiter/tasks", response_model=list[RecruiterTaskResponse])
+async def get_recruiter_tasks(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(["recruiter"])),
+):
+    tasks = (
+        db.query(RecruiterTask)
+        .filter(RecruiterTask.recruiter_id == current_user.id)
+        .order_by(RecruiterTask.created_at.desc(), RecruiterTask.id.desc())
+        .all()
+    )
+    if not tasks:
+        return []
+
+    task_ids = [task.id for task in tasks]
+    analyzed_counts = dict(
+        db.query(RecruiterCandidate.task_id, func.count(AnalysisRun.id))
+        .join(AnalysisRun, RecruiterCandidate.analysis_run_id == AnalysisRun.id)
+        .filter(
+            RecruiterCandidate.task_id.in_(task_ids),
+            AnalysisRun.user_id == current_user.id,
+            AnalysisRun.status == "completed",
+        )
+        .group_by(RecruiterCandidate.task_id)
+        .all()
+    )
+    average_scores = dict(
+        db.query(RecruiterCandidate.task_id, func.avg(SkillScore.overall_score))
+        .join(AnalysisRun, RecruiterCandidate.analysis_run_id == AnalysisRun.id)
+        .join(SkillScore, SkillScore.analysis_run_id == AnalysisRun.id)
+        .filter(
+            RecruiterCandidate.task_id.in_(task_ids),
+            AnalysisRun.user_id == current_user.id,
+            AnalysisRun.status == "completed",
+            SkillScore.user_id == current_user.id,
+        )
+        .group_by(RecruiterCandidate.task_id)
+        .all()
+    )
+
+    response = []
+    for task in tasks:
+        analyzed_count = int(analyzed_counts.get(task.id, 0))
+        status = task.status
+        if status == "analyzing" and task.valid_count and analyzed_count >= task.valid_count:
+            status = "completed"
+        avg_score = average_scores.get(task.id)
+        response.append(RecruiterTaskResponse(
+            id=task.id,
+            title=task.title,
+            csv_filename=task.csv_filename,
+            total_candidates=task.total_candidates or 0,
+            valid_count=task.valid_count or 0,
+            skipped_count=task.skipped_count or 0,
+            status=status,
+            created_at=task.created_at,
+            updated_at=task.updated_at,
+            analyzed_count=analyzed_count,
+            average_skill_score=round(float(avg_score), 2) if avg_score is not None else None,
+        ))
     return response
+
+
+@router.get("/recruiter/candidates", response_model=list[RecruiterCandidateDashboardRow])
+async def get_recruiter_candidates(
+    task_id: int | None = Query(None),
+    search: str | None = Query(None),
+    min_skill_score: float | None = Query(None),
+    max_skill_score: float | None = Query(None),
+    min_sonar: float | None = Query(None),
+    max_sonar: float | None = Query(None),
+    min_security: float | None = Query(None),
+    max_security: float | None = Query(None),
+    min_coverage: float | None = Query(None),
+    max_coverage: float | None = Query(None),
+    quality_gate: str | None = Query(None),
+    max_bugs: int | None = Query(None),
+    max_technical_debt_minutes: float | None = Query(None),
+    sort_by: str = Query("skill_score"),
+    sort_dir: str = Query("desc"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(["recruiter"])),
+):
+    query_rows = _candidate_query_rows(db, current_user, task_id)
+    rows = _dashboard_rows_from_query(query_rows, db)
+    rows = _apply_candidate_filters(
+        rows,
+        search,
+        min_skill_score,
+        max_skill_score,
+        min_sonar,
+        max_sonar,
+        min_security,
+        max_security,
+        min_coverage,
+        max_coverage,
+        quality_gate,
+        max_bugs,
+        max_technical_debt_minutes,
+    )
+    return [RecruiterCandidateDashboardRow(**row) for row in _sort_candidate_rows(rows, sort_by, sort_dir)]
+
+
+@router.get("/recruiter/dashboard-summary", response_model=RecruiterDashboardSummaryResponse)
+async def get_recruiter_dashboard_summary(
+    task_id: int | None = Query(None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(["recruiter"])),
+):
+    query_rows = _candidate_query_rows(db, current_user, task_id)
+    rows = _dashboard_rows_from_query(query_rows, db)
+    runs_by_id = {run.id: run for run, *_ in query_rows}
+    return RecruiterDashboardSummaryResponse(**build_dashboard_summary(rows, current_user, runs_by_id))
+
+
+def _severity_rank(value: object) -> int:
+    text = str(value or "").upper()
+    return {
+        "BLOCKER": 0,
+        "CRITICAL": 1,
+        "HIGH": 2,
+        "MAJOR": 2,
+        "MEDIUM": 3,
+        "MINOR": 4,
+        "LOW": 5,
+        "INFO": 6,
+    }.get(text, 9)
+
+
+def _risky_file_rank(row: SonarFileMeasure) -> float:
+    return float(_safe_number(row.cognitive_complexity) or 0) + float(_safe_number(row.duplicated_lines_density) or 0) + max(0.0, 80.0 - float(_safe_number(row.coverage) or 80))
+
+
+@router.get("/recruiter/candidate-insights/{run_id}", response_model=RecruiterCandidateInsightResponse)
+async def get_recruiter_candidate_insights(
+    run_id: int,
+    force_refresh: bool = Query(False),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(["recruiter"])),
+):
+    row = (
+        db.query(AnalysisRun, Repository, SkillScore, RecruiterCandidate, SonarAnalysisSummary, RecruiterTask)
+        .join(Repository, AnalysisRun.repository_id == Repository.id)
+        .join(
+            SkillScore,
+            (SkillScore.analysis_run_id == AnalysisRun.id) & (SkillScore.user_id == current_user.id),
+        )
+        .join(RecruiterCandidate, RecruiterCandidate.analysis_run_id == AnalysisRun.id)
+        .outerjoin(SonarAnalysisSummary, SonarAnalysisSummary.analysis_run_id == AnalysisRun.id)
+        .outerjoin(RecruiterTask, RecruiterTask.id == RecruiterCandidate.task_id)
+        .filter(
+            AnalysisRun.id == run_id,
+            AnalysisRun.user_id == current_user.id,
+            SkillScore.user_id == current_user.id,
+        )
+        .first()
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Candidate analysis not found")
+
+    run, repo, score, candidate, sonar_summary, task = row
+    if run.status != "completed":
+        raise HTTPException(status_code=400, detail="Candidate analysis is not completed")
+    if task and task.recruiter_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Candidate analysis not found")
+
+    dashboard_row = build_candidate_dashboard_row(
+        run,
+        repo,
+        score,
+        candidate,
+        sonar_summary,
+        task,
+        repo_count=1,
+        contribution_count=1,
+    )
+
+    cached = get_cached_recruiter_candidate_insight(run)
+    if cached and not force_refresh:
+        return RecruiterCandidateInsightResponse(**_summary_candidate_from_row(dashboard_row, cached))
+
+    sonar_issues = (
+        db.query(SonarIssue)
+        .filter(SonarIssue.analysis_run_id == run.id)
+        .all()
+    )
+    sonar_issues = sorted(sonar_issues, key=lambda item: (_severity_rank(item.severity), item.file_path or "", item.line or 0))[:10]
+
+    security_findings = (
+        db.query(SecurityFinding)
+        .filter(SecurityFinding.analysis_run_id == run.id)
+        .all()
+    )
+    security_findings = sorted(security_findings, key=lambda item: (_severity_rank(item.severity), item.file_path or "", item.line_number or 0))[:10]
+
+    file_measures = (
+        db.query(SonarFileMeasure)
+        .filter(SonarFileMeasure.analysis_run_id == run.id)
+        .all()
+    )
+    risky_files = sorted(file_measures, key=_risky_file_rank, reverse=True)[:10]
+
+    llm_payload = build_recruiter_candidate_llm_payload(
+        dashboard_row,
+        run,
+        repo,
+        candidate,
+        task,
+        sonar_issues,
+        security_findings,
+        risky_files,
+    )
+
+    ai_mode = (os.environ.get("AI_MODE") or "openrouter").lower()
+    model_source = ai_mode if ai_mode in {"openrouter", "ollama"} else "openrouter"
+    try:
+        insight = generate_recruiter_candidate_insights(llm_payload)
+    except Exception as exc:
+        logger.warning("recruiter_candidate_insights failed; using fallback for run_id=%s: %s", run.id, exc)
+        insight = _fallback_recruiter_candidate_insights(llm_payload)
+        model_source = "fallback"
+
+    cached_payload = set_cached_recruiter_candidate_insight(run, insight, model_source)
+    db.commit()
+    return RecruiterCandidateInsightResponse(**_summary_candidate_from_row(dashboard_row, cached_payload))
 
 
 @router.delete("/recruiter/analysis/{analysis_id}")
@@ -2087,7 +2947,11 @@ async def get_analysis_result(
         SkillScore.analysis_run_id == run.id,
         SkillScore.user_id == current_user.id,
     ).first()
-    findings_count = db.query(SecurityFinding).filter(SecurityFinding.analysis_run_id == run.id).count()
+    candidate = (
+        db.query(RecruiterCandidate)
+        .filter(RecruiterCandidate.analysis_run_id == run.id)
+        .first()
+    )
     ai_insights = run.ai_insights or {}
     if isinstance(ai_insights, dict):
         ai_insights = dict(ai_insights)
@@ -2100,11 +2964,19 @@ async def get_analysis_result(
         sonar_health_score=sonar_summary["sonar_health_score"],
         security_score=getattr(score_row, "security_awareness_score", None),
     )
+    security_assessment = _security_breakdown_for_run(
+        db,
+        run.id,
+        getattr(score_row, "security_awareness_score", None),
+    )
     return {
         "analysis_run_id": run.id,
         "repo": run.repository.full_name,
         "branch": run.branch,
         "status": run.status,
+        "candidate_name": candidate.candidate_name if candidate else None,
+        "github_login": candidate.github_login if candidate else None,
+        "github_avatar_url": candidate.github_avatar_url if candidate else None,
         **skill_fields,
         "sonar_health_score": sonar_summary["sonar_health_score"],
         "sonar_state": sonar_summary["sonar_state"],
@@ -2118,7 +2990,8 @@ async def get_analysis_result(
         "maintainability_rating": sonar_summary["maintainability_rating"],
         "technical_debt_minutes": sonar_summary["technical_debt_minutes"],
         "lines_of_code": sonar_summary["lines_of_code"],
-        "security_findings_count": findings_count,
+        "security_findings_count": security_assessment["findings_count"],
+        "security_assessment": security_assessment,
         "ai_insights": ai_insights,
         "completed_at": run.completed_at
     }

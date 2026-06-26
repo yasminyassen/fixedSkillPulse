@@ -504,7 +504,7 @@ export default function ManagerSecurityDashboard() {
       <style>{`
         .ms-page { max-width: 960px; margin: 0 auto; padding: 32px 18px 56px; color: var(--text-primary); }
         .ms-header { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; margin-bottom: 22px; }
-        .ms-header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 850; font-family: 'Syne', sans-serif; letter-spacing: 0; }
+        .ms-header h1 { margin: 0 0 6px; font-size: 28px; font-weight: 850; font-family: 'Inter', sans-serif; letter-spacing: 0; }
         .ms-header p, .ms-subtle { margin: 0; color: var(--text-secondary); font-size: 13.5px; }
         .ms-refresh { width: 42px; height: 42px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
         .ms-hero, .ms-panel, .ms-filter, .ms-callout, .ms-about { border: 1px solid var(--border); background: var(--bg-card); border-radius: 8px; box-shadow: var(--shadow-card); }

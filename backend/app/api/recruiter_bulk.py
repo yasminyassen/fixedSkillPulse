@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from app.core.auth_utils import decrypt_github_token, require_role
 from app.core.rate_limiter import limiter
 from app.db.database import get_db
-from app.db.models import User
+from app.db.models import RecruiterTask, User
 from app.services.code_analysis_service import build_github_connect_payload
 from app.services.github_client import refresh_github_access_token_for_user
 from app.services.recruiter_analysis_service import schedule_recruiter_repo_analysis
@@ -30,12 +30,26 @@ class BulkRepository(BaseModel):
     latest_commit_sha: str | None = None
     analyzed_at: datetime | None = None
     analysis_version: str | None = None
+    skill_score: float | None = None
+    skill_score_level: str | None = None
     sonar_health_score: float | None = None
+    sonar_state: str | None = None
+    quality_gate: str | None = None
+    bugs: float | None = None
+    code_smells: float | None = None
+    coverage: float | None = None
+    duplication_percentage: float | None = None
+    cognitive_complexity: float | None = None
+    reliability_rating: str | None = None
+    maintainability_rating: str | None = None
+    technical_debt_minutes: float | None = None
+    lines_of_code: float | None = None
 
 
 class BulkAnalyzeResponse(BaseModel):
     repositories: list[BulkRepository]
     skipped: list[dict]
+    task_id: int | None = None
 
 
 class PreviewRow(BaseModel):
@@ -62,6 +76,8 @@ class CandidateConfirmRow(BaseModel):
 class BulkConfirmRequest(BaseModel):
     candidates: list[CandidateConfirmRow] = Field(..., min_length=1)
     force_reanalyze: bool = False
+    title: str | None = None
+    csv_filename: str | None = None
 
 
 async def _resolve_recruiter_token(
@@ -100,6 +116,7 @@ async def _schedule_rows(
     db: Session,
     current_user: User,
     force_reanalyze: bool,
+    task_id: int | None = None,
 ) -> BulkAnalyzeResponse:
     token = await _resolve_recruiter_token(request, db, current_user)
     repositories: list[BulkRepository] = []
@@ -117,6 +134,7 @@ async def _schedule_rows(
             repo_name=row["repo_name"],
             branch=row.get("branch") or "main",
             force_reanalyze=force_reanalyze,
+            task_id=task_id,
         )
 
         if result.get("reason"):
@@ -139,10 +157,23 @@ async def _schedule_rows(
             latest_commit_sha=result.get("latest_commit_sha"),
             analyzed_at=result.get("analyzed_at"),
             analysis_version=result.get("analysis_version"),
+            skill_score=result.get("skill_score"),
+            skill_score_level=result.get("skill_score_level"),
             sonar_health_score=result.get("sonar_health_score"),
+            sonar_state=result.get("sonar_state"),
+            quality_gate=result.get("quality_gate"),
+            bugs=result.get("bugs"),
+            code_smells=result.get("code_smells"),
+            coverage=result.get("coverage"),
+            duplication_percentage=result.get("duplication_percentage"),
+            cognitive_complexity=result.get("cognitive_complexity"),
+            reliability_rating=result.get("reliability_rating"),
+            maintainability_rating=result.get("maintainability_rating"),
+            technical_debt_minutes=result.get("technical_debt_minutes"),
+            lines_of_code=result.get("lines_of_code"),
         ))
 
-    return BulkAnalyzeResponse(repositories=repositories, skipped=skipped)
+    return BulkAnalyzeResponse(repositories=repositories, skipped=skipped, task_id=task_id)
 
 
 @router.post("/bulk-analyze/preview", response_model=BulkPreviewResponse)
@@ -223,6 +254,22 @@ async def bulk_analyze_confirm(
             detail="No valid candidates to analyze. Fix the preview rows and try again.",
         )
 
+    task_title = (payload.title or "").strip()
+    if not task_title:
+        task_title = f"Recruiter Batch {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')}"
+    task = RecruiterTask(
+        recruiter_id=current_user.id,
+        title=task_title,
+        csv_filename=(payload.csv_filename or None),
+        total_candidates=len(payload.candidates),
+        valid_count=len(rows),
+        skipped_count=len(skipped),
+        status="analyzing",
+    )
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
     result = await _schedule_rows(
         rows=rows,
         request=request,
@@ -230,8 +277,13 @@ async def bulk_analyze_confirm(
         db=db,
         current_user=current_user,
         force_reanalyze=payload.force_reanalyze,
+        task_id=task.id,
     )
     result.skipped = skipped + result.skipped
+    task.skipped_count = len(result.skipped)
+    if len(result.repositories) == 0:
+        task.status = "failed" if task.valid_count > 0 else "completed"
+    db.commit()
 
     logger.info(
         "Recruiter bulk confirm finished scheduled=%d skipped=%d user_id=%s",

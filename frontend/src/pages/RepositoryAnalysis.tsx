@@ -495,8 +495,8 @@ export default function RepositoryAnalysis() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        input, select, textarea { font-family: 'DM Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        input, select, textarea { font-family: 'Inter', sans-serif; }
 
         .ra-input {
           width: 100%; padding: 12px 14px;
@@ -527,7 +527,7 @@ export default function RepositoryAnalysis() {
           padding: 11px 24px;
           background: linear-gradient(135deg, ${accent}, #ec4899);
           border: none; border-radius: 12px; color: white;
-          font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+          font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
           cursor: pointer; transition: all 0.2s;
           box-shadow: 0 4px 16px ${accent}30;
         }
@@ -540,7 +540,7 @@ export default function RepositoryAnalysis() {
           background: var(--bg-card);
           border: 1px solid var(--border);
           border-radius: 9px; color: var(--text-secondary);
-          font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+          font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
           cursor: pointer; transition: all 0.2s;
         }
         .ra-btn-ghost:hover { background: var(--bg-card-hover); color: var(--text-primary); border-color: var(--border-hover); }
@@ -615,7 +615,7 @@ export default function RepositoryAnalysis() {
         .task-badge.frontend { background: rgba(59,130,246,0.15);  color: #60a5fa; }
         .task-badge.qa       { background: rgba(245,158,11,0.15);   color: #fbbf24; }
         .edit-modal { background: var(--bg-sidebar); border: 1px solid var(--border-hover); border-radius: 16px; width: 100%; max-width: 500px; padding: 24px; box-shadow: var(--shadow-card); animation: zoomIn 0.2s ease-out; }
-        .edit-textarea { width: 100%; min-height: 100px; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; resize: vertical; box-sizing: border-box; }
+        .edit-textarea { width: 100%; min-height: 100px; padding: 12px 14px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; resize: vertical; box-sizing: border-box; }
         .edit-textarea:focus { border-color: ${accent}80; }
         .edit-textarea::placeholder { color: var(--text-faint); }
 
@@ -639,7 +639,7 @@ export default function RepositoryAnalysis() {
       {editModal.isOpen && (
         <div className="ra-modal-overlay" style={{ zIndex: 200 }}>
           <div className="edit-modal">
-            <h3 style={{ margin: "0 0 16px", fontSize: 18, color: "var(--text-primary)", fontFamily: "'Syne', sans-serif" }}>{editModal.title}</h3>
+            <h3 style={{ margin: "0 0 16px", fontSize: 18, color: "var(--text-primary)", fontFamily: "'Inter', sans-serif" }}>{editModal.title}</h3>
             <textarea className="edit-textarea" value={editModal.text} onChange={e => setEditModal({ ...editModal, text: e.target.value })} placeholder="Type your changes here..." autoFocus />
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 20 }}>
               <button className="ra-btn-ghost" onClick={closeEditModal} disabled={isSavingEdit}>Cancel</button>
@@ -653,7 +653,7 @@ export default function RepositoryAnalysis() {
       {mergeModal.isOpen && (
         <div className="ra-modal-overlay" style={{ zIndex: 200 }}>
           <div className="edit-modal">
-            <h3 style={{ margin: "0 0 16px", fontSize: 18, color: "var(--text-primary)", fontFamily: "'Syne', sans-serif" }}>Merge Technical Tasks</h3>
+            <h3 style={{ margin: "0 0 16px", fontSize: 18, color: "var(--text-primary)", fontFamily: "'Inter', sans-serif" }}>Merge Technical Tasks</h3>
             <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 12 }}>Edit the combined description. The tasks will be merged into a single task covering all their Acceptance Criteria.</div>
             <textarea className="edit-textarea" value={mergeModal.text} onChange={e => setMergeModal({ ...mergeModal, text: e.target.value })} style={{ minHeight: 150 }} autoFocus />
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 20 }}>
@@ -683,7 +683,7 @@ export default function RepositoryAnalysis() {
           <div className="ra-modal">
             <div className="ra-modal-header">
               <div>
-                <h2 style={{ margin: 0, fontSize: 20, color: "var(--text-primary)", fontFamily: "'Syne', sans-serif" }}>Review Extracted Requirements</h2>
+                <h2 style={{ margin: 0, fontSize: 20, color: "var(--text-primary)", fontFamily: "'Inter', sans-serif" }}>Review Extracted Requirements</h2>
                 <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>AI has extracted {prdStories.length} user stories. Review, edit if needed, and confirm to proceed.</div>
               </div>
               <button onClick={() => setShowPrdModal(false)} style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1 }}>✕</button>
@@ -791,7 +791,7 @@ export default function RepositoryAnalysis() {
         minHeight: "100vh",
         padding: "36px 40px 80px",
         color: "var(--text-primary)",
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         background: "var(--bg-gradient)",
       }}>
         <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
@@ -808,7 +808,7 @@ export default function RepositoryAnalysis() {
             }}>
               Repository Analysis
             </div>
-            <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px", margin: "0 0 4px" }}>
+            <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 26, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px", margin: "0 0 4px" }}>
               Analyze GitHub repositories
             </h1>
             <p style={{ fontSize: 13.5, color: "var(--text-muted)", margin: 0, lineHeight: 1.6 }}>

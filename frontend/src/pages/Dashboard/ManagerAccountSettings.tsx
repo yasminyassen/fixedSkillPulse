@@ -212,13 +212,13 @@ export default function ManagerAccountSettings() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         .mas-page {
           min-height: 100vh;
           background: var(--bg-gradient);
           color: var(--text-primary);
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           padding: 36px 40px 80px;
         }
         .mas-shell {
@@ -236,7 +236,7 @@ export default function ManagerAccountSettings() {
         }
         .mas-header h1 {
           margin: 0;
-          font-family: 'Syne', sans-serif;
+          font-family: 'Inter', sans-serif;
           font-size: 26px;
           letter-spacing: 0;
         }
@@ -257,7 +257,7 @@ export default function ManagerAccountSettings() {
           background: var(--bg-card);
           color: var(--text-secondary);
           padding: 0 14px;
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           font-size: 13px;
           font-weight: 800;
           cursor: pointer;
@@ -350,7 +350,7 @@ export default function ManagerAccountSettings() {
           color: var(--text-primary);
           outline: 0;
           padding: 0 12px;
-          font-family: 'DM Sans', system-ui, sans-serif;
+          font-family: 'Inter', system-ui, sans-serif;
           font-size: 13px;
           box-sizing: border-box;
         }

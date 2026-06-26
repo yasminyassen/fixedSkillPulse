@@ -23,9 +23,9 @@ const WorkflowStyles = ({ accent }: { accent: string }) => (
     .story-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px}
     .task-badge{font-size:10px;font-weight:800;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:rgba(139,92,246,.15);color:#a78bfa}
     .task-badge.frontend{background:rgba(59,130,246,.15);color:#60a5fa}.task-badge.qa{background:rgba(245,158,11,.15);color:#fbbf24}
-    .ra-btn-primary{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,${accent},#ec4899);border:none;border-radius:12px;color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+    .ra-btn-primary{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(135deg,${accent},#ec4899);border:none;border-radius:12px;color:white;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
     .ra-btn-primary:disabled{opacity:.5;cursor:not-allowed}
-    .ra-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+    .ra-btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:9px;color:var(--text-secondary);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
     .ra-select{width:100%;padding:9px 12px;background:var(--bg-input);border:1px solid rgba(99,102,241,.25);border-radius:12px;color:var(--text-primary);font-size:14px;outline:none}
     .ra-select option{background:var(--bg-base);color:var(--text-primary)}
     .pulse-dot{width:8px;height:8px;border-radius:50%;background:#fbbf24;animation:pulse 1.4s ease-in-out infinite}
@@ -119,7 +119,7 @@ export function ExtractedRequirementsReviewModal({
         <div className="ra-modal">
           <div className="ra-modal-header">
             <div>
-              <h2 style={{ margin: 0, fontSize: 20, color: "var(--text-primary)", fontFamily: "'Syne', sans-serif" }}>Review Extracted Requirements</h2>
+              <h2 style={{ margin: 0, fontSize: 20, color: "var(--text-primary)", fontFamily: "'Inter', sans-serif" }}>Review Extracted Requirements</h2>
               <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>AI has extracted {stories.length} user stories. Review, edit if needed, and confirm to proceed.</div>
             </div>
             <button onClick={onClose} style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1 }}>x</button>

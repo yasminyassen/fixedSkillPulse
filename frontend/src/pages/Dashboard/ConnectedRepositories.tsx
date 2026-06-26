@@ -17,7 +17,7 @@ function Skeleton({ w, h, radius = 8 }: { w: number | string; h: number; radius?
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: "16px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.2px", margin: "0 0 16px", paddingBottom: "12px", borderBottom: "1px solid var(--border)" }}>
+    <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: "16px", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.2px", margin: "0 0 16px", paddingBottom: "12px", borderBottom: "1px solid var(--border)" }}>
       {children}
     </h2>
   );
@@ -33,7 +33,7 @@ function Card({ children, style }: { children: React.ReactNode; style?: React.CS
 
 function Toast({ msg, type }: { msg: string; type: "success" | "error" }) {
   return (
-    <div style={{ position: "fixed", bottom: "28px", right: "28px", zIndex: 9999, padding: "12px 20px", borderRadius: "12px", background: type === "success" ? "rgba(52,211,153,0.12)" : "rgba(248,113,113,0.12)", border: `1px solid ${type === "success" ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`, color: type === "success" ? "#34d399" : "#f87171", fontSize: "13px", fontWeight: 600, display: "flex", alignItems: "center", gap: "8px", boxShadow: "0 8px 32px rgba(0,0,0,0.2)", fontFamily: "'DM Sans', sans-serif" }}>
+    <div style={{ position: "fixed", bottom: "28px", right: "28px", zIndex: 9999, padding: "12px 20px", borderRadius: "12px", background: type === "success" ? "rgba(52,211,153,0.12)" : "rgba(248,113,113,0.12)", border: `1px solid ${type === "success" ? "rgba(52,211,153,0.3)" : "rgba(248,113,113,0.3)"}`, color: type === "success" ? "#34d399" : "#f87171", fontSize: "13px", fontWeight: 600, display: "flex", alignItems: "center", gap: "8px", boxShadow: "0 8px 32px rgba(0,0,0,0.2)", fontFamily: "'Inter', sans-serif" }}>
       {type === "success" ? "✓" : "✕"} {msg}
     </div>
   );
@@ -73,7 +73,7 @@ export default function ConnectedRepositories() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0% 50%} }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .repo-row { transition: background 0.15s; border-radius: 12px; }
@@ -84,14 +84,14 @@ export default function ConnectedRepositories() {
 
       {toast && <Toast msg={toast.msg} type={toast.type} />}
 
-      <div style={{ padding: "32px 36px", maxWidth: "720px", fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ padding: "32px 36px", maxWidth: "720px", fontFamily: "'Inter', sans-serif" }}>
 
         <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "28px" }}>
           <button onClick={() => navigate("/dashboard/developer/profile")} style={{ width: 36, height: 36, borderRadius: "10px", border: "1px solid var(--border)", background: "var(--bg-card)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", cursor: "pointer" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
           </button>
           <div>
-            <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: "24px", fontWeight: 800, color: "var(--text-primary)", margin: 0, letterSpacing: "-0.4px" }}>Connected Repositories</h1>
+            <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: "24px", fontWeight: 800, color: "var(--text-primary)", margin: 0, letterSpacing: "-0.4px" }}>Connected Repositories</h1>
             <p style={{ fontSize: "13px", color: "var(--text-muted)", margin: "2px 0 0" }}>{loading ? "Loading…" : `${completedRepos.length} analyzed ${completedRepos.length === 1 ? "repository" : "repositories"}`}</p>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function ConnectedRepositories() {
               </div>
               <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "4px" }}>No analyzed repositories yet</div>
               <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "20px" }}>Analyze a repository to see it here</div>
-              <button onClick={() => navigate(analysisDashPath)} style={{ padding: "9px 20px", borderRadius: "10px", border: "none", background: "#6366f1", color: "white", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}>
+              <button onClick={() => navigate(analysisDashPath)} style={{ padding: "9px 20px", borderRadius: "10px", border: "none", background: "#6366f1", color: "white", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Inter', sans-serif" }}>
                 Analyze a Repository
               </button>
             </div>
@@ -146,11 +146,11 @@ export default function ConnectedRepositories() {
                     <span style={{ fontSize: "16px", fontWeight: 800, color: sColor }}>{Math.round(sc)}</span>
                   </div>
                 )}
-                <button className="view-btn" onClick={() => navigate(`/analysis/${repo.analysis_id}`)} style={{ padding: "7px 14px", borderRadius: "8px", flexShrink: 0, border: "1px solid rgba(99,102,241,0.25)", background: "rgba(99,102,241,0.08)", color: "#818cf8", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.15s", display: "flex", alignItems: "center", gap: "5px" }}>
+                <button className="view-btn" onClick={() => navigate(`/analysis/${repo.analysis_id}`)} style={{ padding: "7px 14px", borderRadius: "8px", flexShrink: 0, border: "1px solid rgba(99,102,241,0.25)", background: "rgba(99,102,241,0.08)", color: "#818cf8", fontSize: "12px", fontWeight: 600, cursor: "pointer", fontFamily: "'Inter', sans-serif", transition: "all 0.15s", display: "flex", alignItems: "center", gap: "5px" }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   View
                 </button>
-                <button className="disc-btn" onClick={() => handleDisconnect(repo.analysis_id, repo.repo_name)} disabled={isDisconnecting} title="Disconnect this analysis" style={{ padding: "7px 10px", borderRadius: "8px", flexShrink: 0, border: "1px solid var(--border)", background: "var(--bg-card)", color: "var(--text-muted)", fontSize: "12px", fontWeight: 600, cursor: isDisconnecting ? "not-allowed" : "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.15s", opacity: isDisconnecting ? 0.5 : 1, display: "flex", alignItems: "center", gap: "5px" }}>
+                <button className="disc-btn" onClick={() => handleDisconnect(repo.analysis_id, repo.repo_name)} disabled={isDisconnecting} title="Disconnect this analysis" style={{ padding: "7px 10px", borderRadius: "8px", flexShrink: 0, border: "1px solid var(--border)", background: "var(--bg-card)", color: "var(--text-muted)", fontSize: "12px", fontWeight: 600, cursor: isDisconnecting ? "not-allowed" : "pointer", fontFamily: "'Inter', sans-serif", transition: "all 0.15s", opacity: isDisconnecting ? 0.5 : 1, display: "flex", alignItems: "center", gap: "5px" }}>
                   {isDisconnecting ? (<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: "spin 1s linear infinite" }}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>) : (<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>)}
                 </button>
               </div>
@@ -159,7 +159,7 @@ export default function ConnectedRepositories() {
         </Card>
 
         <div style={{ marginTop: "16px", textAlign: "center" }}>
-          <button onClick={() => navigate(analysisDashPath)} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 22px", borderRadius: "10px", border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.08)", color: "#818cf8", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", transition: "all 0.15s" }}>
+          <button onClick={() => navigate(analysisDashPath)} style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "10px 22px", borderRadius: "10px", border: "1px solid rgba(99,102,241,0.3)", background: "rgba(99,102,241,0.08)", color: "#818cf8", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "'Inter', sans-serif", transition: "all 0.15s" }}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Analyze a New Repository
           </button>

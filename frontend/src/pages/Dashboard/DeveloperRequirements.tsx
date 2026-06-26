@@ -414,14 +414,14 @@ export default function DeveloperRequirements() {
   return (
     <DashboardLayout>
       <style>{`
-        .devreq-page{min-height:100vh;background:var(--bg-base);color:white;padding:28px clamp(18px,3vw,42px);font-family:'DM Sans',sans-serif}
-        .devreq-title{font-family:'Syne',sans-serif;font-size:26px;margin:0;color:white}
+        .devreq-page{min-height:100vh;background:var(--bg-base);color:white;padding:28px clamp(18px,3vw,42px);font-family:'Inter',sans-serif}
+        .devreq-title{font-family:'Inter',sans-serif;font-size:26px;margin:0;color:white}
         .devreq-subtitle{margin:7px 0 0;color:rgba(255,255,255,.48);font-size:13px;line-height:1.5}
         .devreq-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px}
         .rq-panel{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px}
         .devreq-toolbar{display:grid;grid-template-columns:minmax(220px,320px) 1fr 190px auto;gap:14px;align-items:end;padding:14px;margin:22px 0 18px}
         .devreq-label{font-size:10px;font-weight:900;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px}
-        .rq-input,.rq-select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:white;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;padding:8px 10px;box-sizing:border-box}
+        .rq-input,.rq-select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;color:white;font-family:'Inter',sans-serif;font-size:13px;outline:none;padding:8px 10px;box-sizing:border-box}
         .rq-input:focus,.rq-select:focus{border-color:#6366f180;background:rgba(255,255,255,0.06)}
         .rq-select option{background:#1a1a2e;color:white}
         .rq-select{height:38px;width:100%}.rq-input{height:38px;width:100%}
@@ -429,7 +429,7 @@ export default function DeveloperRequirements() {
         .devreq-btn{height:38px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:9px;color:rgba(255,255,255,.74);display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;font-weight:800;font-size:12px;cursor:pointer}
         .devreq-btn:hover{border-color:rgba(99,102,241,.45);background:rgba(255,255,255,.065);color:white}
         .devreq-btn.slim{height:34px;margin-top:2px;width:max-content}
-        .rq-btn-ghost,.rq-btn-primary{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
+        .rq-btn-ghost,.rq-btn-primary{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
         .rq-btn-ghost{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
         .rq-btn-primary{background:#7c3aed;border:1px solid #7c3aed;color:white}
         .devreq-metrics{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:16px;margin-bottom:24px}

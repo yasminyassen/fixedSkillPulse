@@ -176,10 +176,10 @@ const Login: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .lg-page { font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; overflow: hidden; position: relative; transition: background 0.3s ease; }
+        .lg-page { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; overflow: hidden; position: relative; transition: background 0.3s ease; }
         .lg-orb1 { position: fixed; border-radius: 50%; z-index: 0; width: 700px; height: 700px; top: -200px; left: -150px; animation: lgDrift1 9s ease-in-out infinite alternate; pointer-events: none; }
         .lg-orb2 { position: fixed; border-radius: 50%; z-index: 0; width: 500px; height: 500px; bottom: -120px; right: -100px; animation: lgDrift2 12s ease-in-out infinite alternate; pointer-events: none; }
         .lg-orb3 { position: fixed; border-radius: 50%; z-index: 0; width: 320px; height: 320px; top: 30%; right: 30%; animation: lgDrift1 7s ease-in-out infinite alternate-reverse; pointer-events: none; }
@@ -201,15 +201,15 @@ const Login: React.FC = () => {
         .lg-pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: #f472b6; animation: lgBlink 2s ease infinite; }
         @keyframes lgBlink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.65)} }
 
-        .lg-hero-title { font-family: 'Syne', sans-serif; font-size: 46px; font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 14px; }
+        .lg-hero-title { font-family: 'Inter', sans-serif; font-size: 46px; font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 14px; }
         .lg-grad { background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9, #a78bfa, #c4b5fd); background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: lgGrad 5s ease infinite; }
         @keyframes lgGrad { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
         .lg-quote-wrap { position: relative; margin-top: 0; }
-        .lg-quote-mark { font-family: 'Syne', sans-serif; font-size: 90px; font-weight: 800; line-height: 0.7; background: linear-gradient(135deg, #c4b5fd, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.35; position: absolute; top: -12px; left: -6px; pointer-events: none; animation: lgGrad 5s ease infinite; background-size: 300%; }
+        .lg-quote-mark { font-family: 'Inter', sans-serif; font-size: 90px; font-weight: 800; line-height: 0.7; background: linear-gradient(135deg, #c4b5fd, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.35; position: absolute; top: -12px; left: -6px; pointer-events: none; animation: lgGrad 5s ease infinite; background-size: 300%; }
         .lg-quote-inner { padding: 22px 22px 18px 22px; border-radius: 18px; position: relative; overflow: hidden; transition: background 0.3s ease, border-color 0.3s ease; }
         .lg-quote-inner::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #c4b5fd, #f472b6, #67e8f9); border-radius: 3px; }
-        .lg-quote-text { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; line-height: 1.25; letter-spacing: -0.8px; margin-bottom: 8px; position: relative; z-index: 1; }
+        .lg-quote-text { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; line-height: 1.25; letter-spacing: -0.8px; margin-bottom: 8px; position: relative; z-index: 1; }
         .lg-quote-story { background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: lgGrad 4s ease infinite; }
         .lg-quote-sub { font-size: 12px; font-weight: 300; line-height: 1.6; position: relative; z-index: 1; }
 
@@ -217,10 +217,10 @@ const Login: React.FC = () => {
         .lg-card { width: 100%; }
 
         .lg-card-head { margin-bottom: 28px; }
-        .lg-card-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 5px; line-height: 1.2; }
+        .lg-card-title { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 5px; line-height: 1.2; }
         .lg-card-sub { font-size: 13px; font-weight: 300; }
 
-        .lg-gh-btn { width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #7c3aed, #a855f7, #ec4899); background-size: 200%; border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 14.5px; font-weight: 600; color: white; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 22px rgba(124,58,237,0.3); margin-bottom: 8px; position: relative; overflow: hidden; }
+        .lg-gh-btn { width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #7c3aed, #a855f7, #ec4899); background-size: 200%; border: none; border-radius: 14px; font-family: 'Inter', sans-serif; font-size: 14.5px; font-weight: 600; color: white; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 22px rgba(124,58,237,0.3); margin-bottom: 8px; position: relative; overflow: hidden; }
         .lg-gh-btn::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 60%); }
         .lg-gh-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168,85,247,0.4); }
         .lg-gh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -239,7 +239,7 @@ const Login: React.FC = () => {
 
         .lg-input-wrap { display: flex; align-items: center; gap: 10px; padding: 0 14px; height: 46px; border-radius: 13px; transition: all 0.25s; }
         .lg-input-icon { flex-shrink: 0; display: flex; align-items: center; transition: color 0.2s; }
-        .lg-input-field { flex: 1; border: none; background: transparent !important; outline: none; font-family: 'DM Sans', sans-serif; font-size: 14px; }
+        .lg-input-field { flex: 1; border: none; background: transparent !important; outline: none; font-family: 'Inter', sans-serif; font-size: 14px; }
         .lg-pwd-toggle { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; transition: color 0.2s; outline: none; }
         .lg-input-field:-webkit-autofill,
         .lg-input-field:-webkit-autofill:hover,
@@ -250,7 +250,7 @@ const Login: React.FC = () => {
         .lg-success { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 9px; font-size: 11px; font-weight: 500; height: 100%; animation: lgFade 0.2s ease; }
         @keyframes lgFade { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 
-        .lg-submit { width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; border: none; border-radius: 14px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 18px rgba(196,181,253,0.2); animation: lgGrad 4s ease infinite; }
+        .lg-submit { width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; border: none; border-radius: 14px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 18px rgba(196,181,253,0.2); animation: lgGrad 4s ease infinite; }
         .lg-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,114,182,0.3); }
         .lg-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -260,7 +260,7 @@ const Login: React.FC = () => {
         .lg-footer { text-align: center; margin-top: 16px; font-size: 13px; }
         .lg-footer a { font-weight: 600; text-decoration: none; }
 
-        .lg-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .lg-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
       `}</style>
 
       <div className="lg-page" style={{ background: c.pageBg }}>
@@ -298,7 +298,7 @@ const Login: React.FC = () => {
                 <span style={{ height: '12px', background: '#e879f9', opacity: 0.7 }} />
                 <span style={{ height: '7px', background: '#c4b5fd', opacity: 0.4 }} />
               </div>
-              <span style={{ fontFamily: "'Syne', sans-serif", fontSize: "19px", fontWeight: 800, color: c.logoText, letterSpacing: "-0.3px" }}>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "19px", fontWeight: 800, color: c.logoText, letterSpacing: "-0.3px" }}>
                 <span style={{ color: c.logoAccent }}>Skill</span>Pulse
               </span>
             </div>

@@ -63,11 +63,11 @@ const NotFound: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .nf-page {
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Inter', sans-serif;
           min-height: 100vh; display: flex; flex-direction: column;
           align-items: center; justify-content: center;
           position: relative; overflow: hidden;
@@ -91,10 +91,10 @@ const NotFound: React.FC = () => {
         .nf-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 48px; }
         .nf-logo-bars { display: flex; gap: 3px; align-items: flex-end; }
         .nf-logo-bars span { display: block; width: 4px; border-radius: 2px; }
-        .nf-logo-name { font-family: 'Syne', sans-serif; font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
+        .nf-logo-name { font-family: 'Inter', sans-serif; font-size: 19px; font-weight: 800; letter-spacing: -0.3px; }
 
         .nf-number {
-          font-family: 'Syne', sans-serif; font-size: 120px; font-weight: 800;
+          font-family: 'Inter', sans-serif; font-size: 120px; font-weight: 800;
           line-height: 1; letter-spacing: -6px; margin-bottom: 8px;
           background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9, #a78bfa, #c4b5fd);
           background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -105,7 +105,7 @@ const NotFound: React.FC = () => {
 
         .nf-line { width: 60px; height: 2px; background: linear-gradient(90deg, #c4b5fd, #f472b6); border-radius: 2px; margin: 0 auto 24px; }
 
-        .nf-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .nf-title { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 10px; }
         .nf-sub { font-size: 13.5px; font-weight: 300; line-height: 1.7; margin-bottom: 36px; }
 
         .nf-actions { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
@@ -114,7 +114,7 @@ const NotFound: React.FC = () => {
           height: 46px; padding: 0 28px; display: flex; align-items: center; gap: 8px;
           background: linear-gradient(135deg, #7c3aed, #a855f7, #ec4899);
           background-size: 200%; border: none; border-radius: 13px;
-          font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: white;
+          font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: white;
           cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 22px rgba(124,58,237,0.3);
           text-decoration: none;
         }
@@ -123,12 +123,12 @@ const NotFound: React.FC = () => {
         .nf-btn-ghost {
           height: 46px; padding: 0 28px; display: flex; align-items: center; gap: 8px;
           background: transparent; border: 1.5px solid;
-          border-radius: 13px; font-family: 'DM Sans', sans-serif; font-size: 14px;
+          border-radius: 13px; font-family: 'Inter', sans-serif; font-size: 14px;
           font-weight: 600;
           cursor: pointer; transition: all 0.25s; text-decoration: none;
         }
 
-        .nf-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .nf-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
       `}</style>
 
       <div className="nf-page" style={{ background: c.pageBg }}>

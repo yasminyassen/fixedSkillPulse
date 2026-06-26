@@ -170,10 +170,10 @@ const Register: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .sp-reg { font-family: 'DM Sans', sans-serif; min-height: 100vh; display: flex; overflow: hidden; position: relative; transition: background 0.3s ease; }
+        .sp-reg { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; overflow: hidden; position: relative; transition: background 0.3s ease; }
         .sp-orb1 { position: fixed; border-radius: 50%; z-index: 0; width: 700px; height: 700px; top: -200px; left: -150px; animation: spDrift1 9s ease-in-out infinite alternate; pointer-events: none; }
         .sp-orb2 { position: fixed; border-radius: 50%; z-index: 0; width: 500px; height: 500px; bottom: -120px; right: 380px; animation: spDrift2 12s ease-in-out infinite alternate; pointer-events: none; }
         .sp-orb3 { position: fixed; border-radius: 50%; z-index: 0; width: 320px; height: 320px; top: 35%; right: -60px; animation: spDrift1 7s ease-in-out infinite alternate-reverse; pointer-events: none; }
@@ -189,7 +189,7 @@ const Register: React.FC = () => {
         .sp-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 100px; font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 16px; width: fit-content; }
         .sp-pulse-dot { width: 6px; height: 6px; border-radius: 50%; background: #f472b6; animation: spBlink 2s ease infinite; }
         @keyframes spBlink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.35;transform:scale(0.65)} }
-        .sp-hero-title { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 12px; }
+        .sp-hero-title { font-family: 'Inter', sans-serif; font-size: 42px; font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 12px; }
         .sp-grad { background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9, #a78bfa, #c4b5fd); background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: spGrad 5s ease infinite; }
         @keyframes spGrad { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
         .sp-features { display: flex; flex-direction: column; gap: 8px; margin: 18px 0 0 0; }
@@ -198,17 +198,17 @@ const Register: React.FC = () => {
         .sp-feat-label { font-size: 12.5px; font-weight: 700; margin-bottom: 1px; letter-spacing: -0.2px; }
         .sp-feat-desc { font-size: 11px; font-weight: 300; line-height: 1.4; }
         .sp-quote-wrap { position: relative; margin-top: 20px; }
-        .sp-quote-mark { font-family: 'Syne', sans-serif; font-size: 90px; font-weight: 800; line-height: 0.7; background: linear-gradient(135deg, #c4b5fd, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.35; position: absolute; top: -12px; left: -6px; pointer-events: none; animation: spGrad 5s ease infinite; background-size: 300%; }
+        .sp-quote-mark { font-family: 'Inter', sans-serif; font-size: 90px; font-weight: 800; line-height: 0.7; background: linear-gradient(135deg, #c4b5fd, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; opacity: 0.35; position: absolute; top: -12px; left: -6px; pointer-events: none; animation: spGrad 5s ease infinite; background-size: 300%; }
         .sp-quote-inner { padding: 20px 22px 18px 22px; border-radius: 18px; position: relative; overflow: hidden; transition: background 0.3s ease, border-color 0.3s ease; }
         .sp-quote-inner::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, #c4b5fd, #f472b6, #67e8f9); border-radius: 3px; }
-        .sp-quote-text { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; line-height: 1.25; letter-spacing: -0.8px; margin-bottom: 8px; position: relative; z-index: 1; }
+        .sp-quote-text { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; line-height: 1.25; letter-spacing: -0.8px; margin-bottom: 8px; position: relative; z-index: 1; }
         .sp-quote-sub { font-size: 12px; font-weight: 300; line-height: 1.6; position: relative; z-index: 1; }
 
         .sp-right { display: flex; align-items: center; justify-content: center; padding: 24px 36px; height: 100vh; overflow: hidden; transition: background 0.3s ease, border-color 0.3s ease; }
         .sp-card { width: 100%; }
         .sp-card-head { margin-bottom: 16px; }
-        .sp-card-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 4px; line-height: 1.2; }
-        .sp-gh-btn { width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #7c3aed, #a855f7, #ec4899); background-size: 200%; border: none; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; color: white; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 22px rgba(124,58,237,0.3); margin-bottom: 8px; }
+        .sp-card-title { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 4px; line-height: 1.2; }
+        .sp-gh-btn { width: 100%; height: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #7c3aed, #a855f7, #ec4899); background-size: 200%; border: none; border-radius: 14px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; color: white; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 22px rgba(124,58,237,0.3); margin-bottom: 8px; }
         .sp-gh-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(168,85,247,0.4); }
         .sp-gh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .sp-secure { display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; }
@@ -220,7 +220,7 @@ const Register: React.FC = () => {
         .sp-field { display: flex; flex-direction: column; gap: 4px; }
         .sp-field-label { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; }
         .sp-input-wrap { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 40px; border-radius: 11px; transition: all 0.25s; }
-        .sp-input-field { flex: 1; border: none; background: transparent !important; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13px; }
+        .sp-input-field { flex: 1; border: none; background: transparent !important; outline: none; font-family: 'Inter', sans-serif; font-size: 13px; }
         .sp-input-field:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px rgba(30,20,51,0.95) inset !important; -webkit-text-fill-color: white !important; }
         .sp-input-icon { flex-shrink: 0; display: flex; align-items: center; transition: color 0.2s; }
         .sp-role-group { display: flex; flex-direction: column; gap: 5px; }
@@ -231,13 +231,13 @@ const Register: React.FC = () => {
         .sp-error-wrap { height: 36px; margin-top: 2px; }
         .sp-error { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 9px; font-size: 11px; color: #f472b6; font-weight: 500; animation: spFade 0.2s ease; height: 100%; }
         @keyframes spFade { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
-        .sp-submit { width: 100%; height: 46px; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; border: none; border-radius: 13px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 18px rgba(196,181,253,0.2); animation: spGrad 4s ease infinite; }
+        .sp-submit { width: 100%; height: 46px; margin-top: 2px; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; border: none; border-radius: 13px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 18px rgba(196,181,253,0.2); animation: spGrad 4s ease infinite; }
         .sp-submit:hover:not(:disabled) { transform: translateY(-2px); }
         .sp-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         .sp-spinner { width: 15px; height: 15px; border: 2px solid rgba(30,20,51,0.3); border-top-color: #1e1433; border-radius: 50%; animation: spSpin 0.7s linear infinite; }
         @keyframes spSpin { to{transform:rotate(360deg)} }
         .sp-signin { text-align: center; margin-top: 10px; font-size: 12px; }
-        .sp-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .sp-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .sp-pwd-toggle { background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; transition: color 0.2s; outline: none; }
       `}</style>
 
@@ -276,7 +276,7 @@ const Register: React.FC = () => {
                 <span style={{ height: "12px", background: "#e879f9", opacity: 0.7 }} />
                 <span style={{ height: "7px", background: "#c4b5fd", opacity: 0.4 }} />
               </div>
-              <span style={{ fontFamily: "'Syne', sans-serif", fontSize: "19px", fontWeight: 800, color: c.logoText, letterSpacing: "-0.3px" }}>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "19px", fontWeight: 800, color: c.logoText, letterSpacing: "-0.3px" }}>
                 <span style={{ color: c.logoAccent }}>Skill</span>Pulse
               </span>
             </div>

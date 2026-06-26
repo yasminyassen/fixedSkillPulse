@@ -49,14 +49,14 @@ const ResetPassword: React.FC = () => {
     return (
       <>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
           *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
           body { background: #0f0c1a; }
-          .rp-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f0c1a; font-family: 'DM Sans', sans-serif; padding: 24px; position: relative; overflow: hidden; }
+          .rp-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f0c1a; font-family: 'Inter', sans-serif; padding: 24px; position: relative; overflow: hidden; }
           .rp-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(167,139,250,0.15); border-radius: 24px; padding: 56px 48px; text-align: center; max-width: 420px; width: 100%; position: relative; z-index: 2; backdrop-filter: blur(20px); }
-          .rp-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: white; margin-bottom: 8px; }
+          .rp-title { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: white; margin-bottom: 8px; }
           .rp-sub { font-size: 14px; color: rgba(196,181,253,0.5); margin-bottom: 28px; line-height: 1.7; }
-          .rp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 13px 28px; background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; border: none; border-radius: 13px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 6px 20px rgba(124,58,237,0.3); }
+          .rp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 13px 28px; background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; border: none; border-radius: 13px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 6px 20px rgba(124,58,237,0.3); }
           .rp-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.4); }
         `}</style>
         <div className="rp-page">
@@ -75,24 +75,24 @@ const ResetPassword: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0f0c1a; }
-        .rp-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f0c1a; font-family: 'DM Sans', sans-serif; padding: 24px; position: relative; overflow: hidden; }
+        .rp-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #0f0c1a; font-family: 'Inter', sans-serif; padding: 24px; position: relative; overflow: hidden; }
         .rp-orb { position: fixed; border-radius: 50%; background: radial-gradient(circle, rgba(244,114,182,0.16) 0%, transparent 65%); width: 680px; height: 680px; bottom: -220px; right: -120px; pointer-events: none; }
         .rp-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(167,139,250,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(167,139,250,0.04) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; }
         .rp-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(167,139,250,0.15); border-radius: 24px; padding: 48px 40px; max-width: 440px; width: 100%; position: relative; z-index: 2; backdrop-filter: blur(20px); }
-        .rp-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.5px; text-align: center; }
+        .rp-title { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.5px; text-align: center; }
         .rp-sub { font-size: 14px; color: rgba(196,181,253,0.5); margin-bottom: 28px; line-height: 1.7; text-align: center; }
         .rp-form { display: flex; flex-direction: column; gap: 16px; }
         .rp-label { font-size: 12px; font-weight: 600; color: rgba(196,181,253,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
         .rp-input-wrap { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(167,139,250,0.15); border-radius: 12px; padding: 0 14px; transition: border-color 0.2s, box-shadow 0.2s; height: 48px; }
         .rp-input-wrap.focused { border-color: rgba(167,139,250,0.5); box-shadow: 0 0 0 3px rgba(167,139,250,0.09); }
         .rp-icon { color: rgba(167,139,250,0.45); display: flex; align-items: center; }
-        .rp-input { flex: 1; background: transparent; border: none; outline: none; color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; }
+        .rp-input { flex: 1; background: transparent; border: none; outline: none; color: white; font-family: 'Inter', sans-serif; font-size: 14px; }
         .rp-input::placeholder { color: rgba(196,181,253,0.25); }
         .rp-error { font-size: 13px; line-height: 1.5; color: #f472b6; background: rgba(244,114,182,0.08); border: 1px solid rgba(244,114,182,0.2); border-radius: 10px; padding: 10px 14px; }
-        .rp-submit { padding: 14px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; color: #1e1433; border: none; border-radius: 13px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; transition: transform 0.2s; }
+        .rp-submit { padding: 14px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; color: #1e1433; border: none; border-radius: 13px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; transition: transform 0.2s; }
         .rp-submit:hover:not(:disabled) { transform: translateY(-2px); }
         .rp-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         .rp-footer { margin-top: 20px; text-align: center; font-size: 13px; color: rgba(196,181,253,0.4); }

@@ -188,11 +188,11 @@ const RoleSelection: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .rs-page {
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Inter', sans-serif;
           min-height: 100vh; display: flex; flex-direction: column;
           align-items: center; justify-content: center;
           padding: 40px 16px;
@@ -217,7 +217,7 @@ const RoleSelection: React.FC = () => {
         .rs-logo-bars { display: flex; gap: 3px; align-items: flex-end; }
         .rs-logo-bars span { display: block; width: 4px; border-radius: 2px; }
 
-        .rs-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 6px; text-align: center; }
+        .rs-title { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 6px; text-align: center; }
         .rs-title em { font-style: normal; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rsGrad 5s ease infinite; }
         @keyframes rsGrad { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
         .rs-subtitle { font-size: 13px; text-align: center; margin-bottom: 28px; line-height: 1.6; max-width: 400px; font-weight: 300; }
@@ -235,12 +235,12 @@ const RoleSelection: React.FC = () => {
           background: linear-gradient(135deg, #7c3aed, #c4b5fd);
           display: flex; align-items: center; justify-content: center;
           margin-bottom: 10px; overflow: hidden;
-          font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: white;
+          font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 800; color: white;
           border: 2px solid rgba(196,181,253,0.2);
         }
         .rs-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .rs-full-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .rs-full-name { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.3px; }
 
         .rs-verified { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; letter-spacing: 0.3px; }
 
@@ -252,7 +252,7 @@ const RoleSelection: React.FC = () => {
         .rs-info-value { font-size: 12.5px; font-weight: 600; }
 
         .rs-role-card { padding: 24px 22px; display: flex; flex-direction: column; }
-        .rs-role-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 3px; }
+        .rs-role-title { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 3px; }
         .rs-role-subtitle { font-size: 11.5px; margin-bottom: 16px; line-height: 1.5; }
 
         .rs-options { display: flex; flex-direction: column; gap: 8px; flex: 1; }
@@ -270,14 +270,14 @@ const RoleSelection: React.FC = () => {
         .rs-error { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 9px; font-size: 11px; font-weight: 500; height: 100%; animation: rsFade 0.2s ease; }
         @keyframes rsFade { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 
-        .rs-btn { width: 100%; height: 46px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; border: none; border-radius: 13px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 18px rgba(196,181,253,0.2); animation: rsGrad 4s ease infinite; }
+        .rs-btn { width: 100%; height: 46px; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #c4b5fd, #f472b6, #67e8f9); background-size: 300%; border: none; border-radius: 13px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 5px 18px rgba(196,181,253,0.2); animation: rsGrad 4s ease infinite; }
         .rs-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,114,182,0.3); }
         .rs-btn:disabled { opacity: 0.5; cursor: not-allowed; animation: none; background: rgba(167,139,250,0.2); color: rgba(255,255,255,0.4); box-shadow: none; }
 
         .rs-spinner { width: 14px; height: 14px; border: 2px solid rgba(30,20,51,0.3); border-top-color: #1e1433; border-radius: 50%; animation: rsSpin 0.7s linear infinite; }
         @keyframes rsSpin { to{transform:rotate(360deg)} }
 
-        .rs-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .rs-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
 
         @media (max-width: 600px) {
           .rs-layout { grid-template-columns: 1fr; }
@@ -315,7 +315,7 @@ const RoleSelection: React.FC = () => {
               <span style={{height:'12px',background:'#e879f9',opacity:0.7}} />
               <span style={{height:'7px',background:'#c4b5fd',opacity:0.4}} />
             </div>
-            <span className="rs-logo-name" style={{ fontFamily: "'Syne', sans-serif", fontSize: "19px", fontWeight: 800, color: c.logoText, letterSpacing: "-0.3px" }}>
+            <span className="rs-logo-name" style={{ fontFamily: "'Inter', sans-serif", fontSize: "19px", fontWeight: 800, color: c.logoText, letterSpacing: "-0.3px" }}>
               <span style={{ color: c.logoAccent }}>Skill</span>Pulse
             </span>
           </div>

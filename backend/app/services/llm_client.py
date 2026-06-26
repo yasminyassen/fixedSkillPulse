@@ -774,6 +774,212 @@ def generate_repository_manager_recommendations(payload: dict) -> dict:
         return _empty_repository_manager_recommendations()
 
 
+RECRUITER_CANDIDATE_INSIGHT_KEYS = (
+    "summary",
+    "strengths",
+    "areas_to_improve",
+    "recommendation",
+    "recommendation_reason",
+    "risk_level",
+)
+
+RECRUITER_RECOMMENDATIONS = {"strong_hire", "interview", "review_required", "reject"}
+RECRUITER_RISK_LEVELS = {"low", "medium", "high", "critical"}
+
+RECRUITER_CANDIDATE_INSIGHT_PROMPT = """You are generating recruiter-facing candidate insights from one analyzed repository task.
+
+Return ONLY strict JSON with exactly these keys:
+summary, strengths, areas_to_improve, recommendation, recommendation_reason, risk_level.
+
+Rules:
+- Speak to a recruiter, not to a developer.
+- Use only provided metrics.
+- Do not invent vulnerabilities, files, tools, metrics, or candidate traits.
+- Mention exact metric values when useful.
+- No markdown.
+- No extra keys.
+- No biased or personal judgments.
+- Focus only on task performance, code quality, maintainability, testing, and security.
+
+Allowed recommendation values:
+strong_hire, interview, review_required, reject
+
+Allowed risk_level values:
+low, medium, high, critical
+"""
+
+
+def _bounded_list(value: object, max_items: int, max_len: int) -> list[str]:
+    if not isinstance(value, list):
+        return []
+    items: list[str] = []
+    for item in value:
+        text = _short_text(item, max_len)
+        if text:
+            items.append(text)
+    return list(dict.fromkeys(items))[:max_items]
+
+
+def _payload_score(payload: dict, *path: str) -> float | None:
+    value: object = payload
+    for key in path:
+        if not isinstance(value, dict):
+            return None
+        value = value.get(key)
+    try:
+        return float(value) if value is not None and value != "" else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _validate_recruiter_candidate_insights(resp: dict) -> dict:
+    if not isinstance(resp, dict):
+        resp = {}
+
+    recommendation = str(resp.get("recommendation") or "review_required").strip().lower()
+    if recommendation not in RECRUITER_RECOMMENDATIONS:
+        recommendation = "review_required"
+
+    risk_level = str(resp.get("risk_level") or "medium").strip().lower()
+    if risk_level not in RECRUITER_RISK_LEVELS:
+        risk_level = "medium"
+
+    strengths = _bounded_list(resp.get("strengths"), 4, 160)
+    areas_to_improve = _bounded_list(resp.get("areas_to_improve"), 4, 160)
+
+    return {
+        "summary": _short_text(resp.get("summary") or "Candidate performance was reviewed using the available repository analysis metrics.", 450),
+        "strengths": strengths,
+        "areas_to_improve": areas_to_improve,
+        "recommendation": recommendation,
+        "recommendation_reason": _short_text(resp.get("recommendation_reason") or "Recommendation is based on the provided skill, quality, testing, and security metrics.", 220),
+        "risk_level": risk_level,
+    }
+
+
+def _fallback_recruiter_candidate_insights(payload: dict) -> dict:
+    scores = payload.get("scores") if isinstance(payload, dict) else {}
+    sonar_metrics = payload.get("sonar_metrics") if isinstance(payload, dict) else {}
+
+    skill_score = _payload_score(payload, "scores", "skill_score") or 0.0
+    security_score = _payload_score(payload, "scores", "security_score") or 0.0
+    sonar_health_score = _payload_score(payload, "scores", "sonar_health_score") or 0.0
+    coverage = _payload_score(payload, "sonar_metrics", "coverage")
+    bugs = _payload_score(payload, "sonar_metrics", "bugs")
+    duplication = _payload_score(payload, "sonar_metrics", "duplication_percentage")
+    cognitive_complexity = _payload_score(payload, "sonar_metrics", "cognitive_complexity")
+    technical_debt = _payload_score(payload, "sonar_metrics", "technical_debt_minutes")
+
+    strengths: list[str] = []
+    if coverage is not None and coverage >= 80:
+        strengths.append("High test coverage")
+    if security_score >= 85:
+        strengths.append("Strong security hygiene")
+    if bugs is not None and bugs <= 2:
+        strengths.append("Low bug count")
+    if sonar_health_score >= 80:
+        strengths.append("Healthy SonarQube score")
+
+    improvements: list[str] = []
+    if duplication is not None and duplication > 5:
+        improvements.append("Reduce duplicated code")
+    if cognitive_complexity is not None and cognitive_complexity > 25:
+        improvements.append("Optimize complex functions")
+    if technical_debt is not None and technical_debt > 60:
+        improvements.append("Monitor technical debt")
+    if security_score < 70:
+        improvements.append("Review security vulnerabilities")
+    if coverage is not None and coverage < 60:
+        improvements.append("Improve test coverage")
+    if bugs is not None and bugs > 5:
+        improvements.append("Address bug findings")
+
+    if not strengths:
+        strengths.append("Repository analysis completed with usable score data")
+    if not improvements:
+        improvements.append("Continue monitoring quality, testing, and security metrics")
+
+    if skill_score >= 85 and security_score >= 80 and sonar_health_score >= 80:
+        recommendation = "strong_hire"
+    elif skill_score >= 75:
+        recommendation = "interview"
+    elif skill_score >= 60:
+        recommendation = "review_required"
+    else:
+        recommendation = "reject"
+
+    if skill_score >= 85 and security_score >= 85:
+        risk_level = "low"
+    elif skill_score >= 70:
+        risk_level = "medium"
+    elif skill_score >= 50:
+        risk_level = "high"
+    else:
+        risk_level = "critical"
+
+    quality_gate = scores.get("quality_gate") if isinstance(scores, dict) else None
+    summary = (
+        f"Candidate performance was evaluated from the available repository metrics: "
+        f"skill score {round(skill_score, 2)}, Sonar health {round(sonar_health_score, 2)}, "
+        f"and security score {round(security_score, 2)}."
+    )
+    if quality_gate:
+        summary += f" Quality gate status is {quality_gate}."
+
+    return {
+        "summary": _short_text(summary, 450),
+        "strengths": strengths[:4],
+        "areas_to_improve": improvements[:4],
+        "recommendation": recommendation,
+        "recommendation_reason": "Recommendation is based on skill score, Sonar health, security score, coverage, bugs, and maintainability signals.",
+        "risk_level": risk_level,
+    }
+
+
+def _call_recruiter_candidate_insights_once(payload: dict, ai_mode: str) -> dict:
+    if ai_mode == "ollama":
+        url, model = _ollama_config()
+        body = {
+            "model": model,
+            "task": "recruiter_candidate_insights",
+            "payload": payload,
+            "response_format": "json",
+            "instructions": RECRUITER_CANDIDATE_INSIGHT_PROMPT,
+        }
+        jr = _post_with_retry(f"{url.rstrip('/')}/llm", body, max_retries=_max_retries())
+        return jr if isinstance(jr, dict) else {}
+
+    url, key, model = _openrouter_config()
+    body = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": "Return only strict JSON. No markdown. No extra keys."},
+            {
+                "role": "user",
+                "content": (
+                    f"{RECRUITER_CANDIDATE_INSIGHT_PROMPT}\n\n"
+                    "Payload:\n"
+                    f"{json.dumps(payload, ensure_ascii=False)}"
+                ),
+            },
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.2,
+        "max_tokens": 1800,
+    }
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+    jr = _post_with_retry(f"{url.rstrip('/')}/chat/completions", body, headers=headers, max_retries=_max_retries())
+    return _extract_openrouter_resp(jr)
+
+
+def generate_recruiter_candidate_insights(payload: dict) -> dict:
+    if not isinstance(payload, dict):
+        payload = {}
+    ai_mode = (os.environ.get("AI_MODE") or "openrouter").lower()
+    resp = _call_recruiter_candidate_insights_once(payload, ai_mode)
+    return _validate_recruiter_candidate_insights(resp)
+
+
 def rank_learning_resources(payload: Dict[str, Any]) -> Dict[str, Any]:
     """
     Rank learning resources with LLM guidance and a deterministic fallback.

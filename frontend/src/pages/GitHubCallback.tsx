@@ -123,13 +123,13 @@ const GitHubCallback: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         .cb-page {
           min-height: 100vh; display: flex; flex-direction: column;
           align-items: center; justify-content: center;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Inter', sans-serif;
           position: relative; overflow: hidden;
           transition: background 0.3s ease;
         }
@@ -158,7 +158,7 @@ const GitHubCallback: React.FC = () => {
         .cb-logo { display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 32px; }
         .cb-logo-bars { display: flex; gap: 3px; align-items: flex-end; }
         .cb-logo-bars span { display: block; width: 4px; border-radius: 2px; }
-        .cb-brand { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+        .cb-brand { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
 
         .cb-icon {
           width: 64px; height: 64px; border-radius: 50%;
@@ -179,7 +179,7 @@ const GitHubCallback: React.FC = () => {
         @keyframes cbSpin { to { transform: rotate(360deg); } }
 
         .cb-title {
-          font-family: 'Syne', sans-serif;
+          font-family: 'Inter', sans-serif;
           font-size: 20px; font-weight: 800;
           letter-spacing: -0.5px;
           margin-bottom: 8px;
@@ -211,13 +211,13 @@ const GitHubCallback: React.FC = () => {
           margin-top: 24px; padding: 12px 28px;
           background: linear-gradient(135deg, #7c3aed, #a855f7);
           color: white; border: none; border-radius: 13px;
-          font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+          font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
           cursor: pointer; transition: all 0.2s;
           box-shadow: 0 6px 20px rgba(124,58,237,0.3);
         }
         .cb-retry:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(124,58,237,0.4); }
 
-        .cb-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .cb-theme-btn { position: fixed; top: 20px; right: 20px; z-index: 50; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
       `}</style>
 
       <div className="cb-page" style={{ background: c.pageBg }}>

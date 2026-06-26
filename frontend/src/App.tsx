@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { ThemeProvider } from './pages/DashboardLayout';
 
 const GitHubCallback = lazy(() => import('./pages/GitHubCallback'));
 const Login = lazy(() => import('./pages/Login'));
@@ -32,9 +33,10 @@ const DeveloperProfile = lazy(() => import('./pages/Dashboard/DeveloperProfile')
 
 function App() {
   return (
-    <Router>
-      <Suspense fallback={<div style={{ padding: 24 }}>Loading...</div>}>
-        <Routes>
+    <ThemeProvider>
+      <Router>
+        <Suspense fallback={<div style={{ padding: 24 }}>Loading...</div>}>
+          <Routes>
           {/* ── Auth pages ── */}
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
@@ -71,16 +73,16 @@ function App() {
 
           {/* ── Recruiter routes ── */}
           <Route path="/dashboard/recruiter" element={<RecruiterDashboard />} />
-          <Route path="/dashboard/recruiter/analysis" element={<RecruiterDashboard />} />
           <Route path="/dashboard/recruiter/profile" element={<RecruiterProfile />} />
           <Route path="/dashboard/recruiter/account-settings" element={<RecruiterAccountSettings />} />
           <Route path="/dashboard/recruiter/candidates" element={<CandidateEvaluation />} />
 
           {/* ── Fallback ── */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </Router>
+          </Routes>
+        </Suspense>
+      </Router>
+    </ThemeProvider>
   );
 }
 

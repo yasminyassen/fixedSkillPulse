@@ -33,12 +33,12 @@ const VerifyEmail: React.FC = () => {
     return (
       <>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
           *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
           body { background: #0f0c1a; }
           .ve-page {
             min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            background: #0f0c1a; font-family: 'DM Sans', sans-serif; padding: 24px;
+            background: #0f0c1a; font-family: 'Inter', sans-serif; padding: 24px;
             position: relative; overflow: hidden;
           }
           .ve-orb {
@@ -52,14 +52,14 @@ const VerifyEmail: React.FC = () => {
             max-width: 420px; width: 100%; position: relative; z-index: 2;
             backdrop-filter: blur(20px);
           }
-          .ve-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: white; margin-bottom: 8px; }
+          .ve-title { font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800; color: white; margin-bottom: 8px; }
           .ve-sub { font-size: 14px; color: rgba(196,181,253,0.5); margin-bottom: 28px; line-height: 1.7; }
           .ve-btn {
             display: inline-flex; align-items: center; gap: 8px;
             padding: 13px 28px;
             background: linear-gradient(135deg, #7c3aed, #a855f7);
             color: white; border: none; border-radius: 13px;
-            font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+            font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
             cursor: pointer; transition: all 0.2s;
             box-shadow: 0 6px 20px rgba(124,58,237,0.3);
           }
@@ -82,12 +82,12 @@ const VerifyEmail: React.FC = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0f0c1a; }
         .ve-page {
           min-height: 100vh; display: flex; align-items: center; justify-content: center;
-          background: #0f0c1a; font-family: 'DM Sans', sans-serif; padding: 24px;
+          background: #0f0c1a; font-family: 'Inter', sans-serif; padding: 24px;
           position: relative; overflow: hidden;
         }
         .ve-orb {
@@ -107,7 +107,7 @@ const VerifyEmail: React.FC = () => {
           max-width: 440px; width: 100%; position: relative; z-index: 2;
           backdrop-filter: blur(20px);
         }
-        .ve-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .ve-title { font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 8px; letter-spacing: -0.5px; }
         .ve-sub { font-size: 14px; color: rgba(196,181,253,0.5); margin-bottom: 28px; line-height: 1.7; }
         .ve-email { color: #c4b5fd; font-weight: 600; }
         .ve-form { display: flex; flex-direction: column; gap: 16px; }
@@ -120,7 +120,7 @@ const VerifyEmail: React.FC = () => {
         .ve-input-wrap.focused { border-color: rgba(167,139,250,0.5); }
         .ve-input {
           flex: 1; background: transparent; border: none; outline: none;
-          color: white; font-family: 'DM Sans', sans-serif; font-size: 22px;
+          color: white; font-family: 'Inter', sans-serif; font-size: 22px;
           letter-spacing: 0.3em; text-align: center; padding: 14px 0;
         }
         .ve-input::placeholder { color: rgba(196,181,253,0.25); letter-spacing: 0.1em; font-size: 15px; }
@@ -131,7 +131,7 @@ const VerifyEmail: React.FC = () => {
         .ve-submit {
           padding: 14px; background: linear-gradient(135deg, #7c3aed, #a855f7);
           color: white; border: none; border-radius: 13px;
-          font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+          font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600;
           cursor: pointer; transition: all 0.2s;
           box-shadow: 0 6px 20px rgba(124,58,237,0.3);
         }

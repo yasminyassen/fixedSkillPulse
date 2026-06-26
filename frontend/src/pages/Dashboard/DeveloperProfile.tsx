@@ -362,15 +362,15 @@ export default function DeveloperProfile() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        input, select, textarea { font-family: 'DM Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        input, select, textarea { font-family: 'Inter', sans-serif; }
 
         .prof-btn-primary {
           display: inline-flex; align-items: center; gap: 8px;
           padding: 11px 24px;
           background: linear-gradient(135deg, ${accent}, #ec4899);
           border: none; border-radius: 12px; color: white;
-          font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+          font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
           cursor: pointer; transition: all 0.2s;
           box-shadow: 0 4px 16px ${accent}30;
         }
@@ -383,7 +383,7 @@ export default function DeveloperProfile() {
           background: var(--bg-card);
           border: 1px solid var(--border);
           border-radius: 9px; color: var(--text-secondary);
-          font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+          font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
           cursor: pointer; transition: all 0.2s;
         }
         .prof-btn-ghost:hover { background: var(--bg-card-hover); color: var(--text-primary); border-color: var(--border-hover); }
@@ -406,7 +406,7 @@ export default function DeveloperProfile() {
           padding: 6px 14px; border-radius: 8px; border: 1px solid var(--border);
           background: transparent; color: var(--text-muted);
           font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Inter', sans-serif;
         }
         .time-btn.active { background: rgba(99,102,241,0.18); border-color: rgba(99,102,241,0.4); color: #818cf8; }
         .time-btn:hover:not(.active) { color: var(--text-primary); border-color: var(--border-hover); }
@@ -503,14 +503,14 @@ export default function DeveloperProfile() {
 
         .recharts-cartesian-grid-horizontal line,
         .recharts-cartesian-grid-vertical line { stroke: var(--border) !important; }
-        .recharts-text { fill: var(--text-muted) !important; font-family: 'DM Sans',sans-serif !important; font-size: 11px !important; }
+        .recharts-text { fill: var(--text-muted) !important; font-family: 'Inter',sans-serif !important; font-size: 11px !important; }
       `}</style>
 
       <div style={{
         minHeight: "100vh",
         padding: "36px 40px 80px",
         color: "var(--text-primary)",
-        fontFamily: "'DM Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         background: "var(--bg-gradient)",
       }}>
         <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
@@ -527,7 +527,7 @@ export default function DeveloperProfile() {
             }}>
               Developer Profile
             </div>
-            <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px", margin: "0 0 4px" }}>
+            <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 26, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px", margin: "0 0 4px" }}>
               Your profile & progress
             </h1>
             <p style={{ fontSize: 13.5, color: "var(--text-muted)", margin: 0, lineHeight: 1.6 }}>
@@ -637,7 +637,7 @@ export default function DeveloperProfile() {
 
           {/* ═══ 2. PROGRESS OVERVIEW ═══ */}
           <div>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Score Overview</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Score Overview</h2>
             {loading ? (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: "14px" }}>
                 {[1,2].map(i => <Skeleton key={i} w="100%" h={190} radius={16} />)}
@@ -670,7 +670,7 @@ export default function DeveloperProfile() {
 
           <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 16 }}>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: 0 }}>Historical Tracking</h2>
+              <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: 0 }}>Historical Tracking</h2>
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <button type="button" className={`time-btn ${trendView === "monthly" ? "active" : ""}`} onClick={() => setTrendView("monthly")}>Monthly</button>
                 <button type="button" className={`time-btn ${trendView === "daily" ? "active" : ""}`} onClick={() => setTrendView("daily")} disabled={!trendMonths.length}>Daily</button>
@@ -727,7 +727,7 @@ export default function DeveloperProfile() {
           </div>
 
           <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px 28px", overflowX: "auto" }}>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Metrics Breakdown Over Time</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Metrics Breakdown Over Time</h2>
             {loading ? (
               <Skeleton w="100%" h={180} radius={12} />
             ) : data?.metrics_breakdown?.length ? (
@@ -756,7 +756,7 @@ export default function DeveloperProfile() {
           </div>
 
           <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px 28px" }}>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Component Contribution</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Component Contribution</h2>
             {loading ? (
               <Skeleton w="100%" h={260} radius={12} />
             ) : data?.component_contribution?.length ? (
@@ -780,7 +780,7 @@ export default function DeveloperProfile() {
           </div>
 
           <div>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Recommended Skill Improvements</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Recommended Skill Improvements</h2>
             {loading ? (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "12px" }}>
                 {[1,2,3].map(i => <Skeleton key={i} w="100%" h={190} radius={16} />)}
@@ -877,7 +877,7 @@ export default function DeveloperProfile() {
           {false && legacyData && legacyPo && (
           <>
           <div>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Skill Score Engine</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Skill Score Engine</h2>
             {loading ? (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "12px" }}>
                 {[1,2,3,4].map(i => <Skeleton key={i} w="100%" h={130} radius={16} />)}
@@ -914,7 +914,7 @@ export default function DeveloperProfile() {
           {/* ═══ 3. SKILL TIMELINE ═══ */}
           <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px 28px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
-              <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: 0 }}>Skill Score Timeline</h2>
+              <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: 0 }}>Skill Score Timeline</h2>
               <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
                 {(["30","90","all"] as const).map(r => (
                   <button key={r} className={`time-btn${timeRange === r ? " active" : ""}`} onClick={() => setTimeRange(r)}>
@@ -947,7 +947,7 @@ export default function DeveloperProfile() {
 
           {/* ═══ 4. RECENT IMPROVEMENTS ═══ */}
           <div>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Recent Skill Score Improvements</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Recent Skill Score Improvements</h2>
             {loading ? (
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "12px" }}>
                 {[1,2,3,4,5].map(i => <Skeleton key={i} w="100%" h={110} radius={14} />)}
@@ -980,7 +980,7 @@ export default function DeveloperProfile() {
           )}
 
           <div style={{ background: "var(--bg-card)", border: "1px solid var(--border)", borderRadius: 16, padding: "24px 28px" }}>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Recent Activity</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Recent Activity</h2>
             {loading ? (
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {[1,2,3].map(i => <Skeleton key={i} w="100%" h={64} radius={12} />)}
@@ -1027,7 +1027,7 @@ export default function DeveloperProfile() {
 
           {/* ═══ 6. SETTINGS ═══ */}
           <div>
-            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Profile Settings</h2>
+            <h2 style={{ fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.3px", margin: "0 0 16px" }}>Profile Settings</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {[
                 { icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>, label: "Account Settings", desc: "Manage your account details and password", route: "/settings/account" },

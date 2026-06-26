@@ -319,23 +319,23 @@ export default function DeveloperSecurity() {
   return (
     <DashboardLayout>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        input, select { font-family: 'DM Sans', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        input, select { font-family: 'Inter', sans-serif; }
         .sk { background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%); background-size: 400% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: 8px; }
         @keyframes shimmer { 0%{background-position:100% 50%} 100%{background-position:0% 50%} }
         .dim-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; transition: border-color 0.2s, background 0.3s ease; }
         .dim-card:hover { border-color: var(--border-hover); }
-        .skl-select { background: var(--bg-input); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 14px; outline: none; cursor: pointer; transition: border-color 0.2s; min-width: 220px; }
+        .skl-select { background: var(--bg-input); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 13.5px; padding: 10px 14px; outline: none; cursor: pointer; transition: border-color 0.2s; min-width: 220px; }
         .skl-select:focus { border-color: ${accent}80; }
         .skl-select option { background: var(--bg-base); color: var(--text-primary); }
         .skl-label { font-size: 12px; font-weight: 700; color: rgba(167,139,250,0.8); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: block; }
         .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; margin-top: 18px; }
-        .skl-btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; background: linear-gradient(135deg, ${accent}, #ec4899); border: none; border-radius: 10px; color: white; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px ${accent}30; }
+        .skl-btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; background: linear-gradient(135deg, ${accent}, #ec4899); border: none; border-radius: 10px; color: white; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px ${accent}30; }
         .skl-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 24px ${accent}40; }
         .legend-bar { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; padding: 10px 14px; background: var(--bg-input); border-radius: 8px; border: 1px solid var(--border); }
       `}</style>
 
-      <div style={{ minHeight: "100vh", padding: "36px 40px 80px", color: "var(--text-primary)", fontFamily: "'DM Sans', sans-serif", background: "var(--bg-gradient)", transition: "background 0.3s ease" }}>
+      <div style={{ minHeight: "100vh", padding: "36px 40px 80px", color: "var(--text-primary)", fontFamily: "'Inter', sans-serif", background: "var(--bg-gradient)", transition: "background 0.3s ease" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
 
           {/* ── Header ── */}
@@ -350,7 +350,7 @@ export default function DeveloperSecurity() {
             }}>
               Security
             </div>
-            <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px", margin: "0 0 4px" }}>
+            <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 26, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.5px", margin: "0 0 4px" }}>
               Security Overview
             </h1>
             <p style={{ fontSize: 13.5, color: "var(--text-muted)", margin: 0, lineHeight: 1.6 }}>

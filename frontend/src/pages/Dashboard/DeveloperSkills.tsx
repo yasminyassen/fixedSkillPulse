@@ -170,7 +170,7 @@ function SectionTitle({ kicker, title, description, right }: { kicker: string; t
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 18, flexWrap: "wrap" }}>
       <div>
         <div className="sp-label">{kicker}</div>
-        <h2 style={{ margin: "6px 0 4px", fontFamily: "'Syne',sans-serif", fontSize: 21, letterSpacing: "-.35px" }}>{title}</h2>
+        <h2 style={{ margin: "6px 0 4px", fontFamily: "'Inter',sans-serif", fontSize: 21, letterSpacing: "-.35px" }}>{title}</h2>
         {description && <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 13, lineHeight: 1.55 }}>{description}</p>}
       </div>
       {right}
@@ -537,7 +537,7 @@ export default function DeveloperSkills() {
         .sp-label { font-size: 11px; font-weight: 800; color: rgba(167,139,250,.82); text-transform: uppercase; letter-spacing: .75px; }
         .sp-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; border: 1px solid; font-size: 11.5px; font-weight: 800; white-space: nowrap; }
         .sp-empty { padding: 28px 20px; border: 1px dashed var(--border-hover); border-radius: 14px; background: var(--bg-input); color: var(--text-muted); font-size: 13px; text-align: center; }
-        .skl-select, .sp-search { background: var(--bg-input); border: 1px solid rgba(99,102,241,.25); border-radius: 12px; color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 13.5px; padding: 10px 14px; outline: none; transition: border-color .2s; }
+        .skl-select, .sp-search { background: var(--bg-input); border: 1px solid rgba(99,102,241,.25); border-radius: 12px; color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 13.5px; padding: 10px 14px; outline: none; transition: border-color .2s; }
         .skl-select:focus, .sp-search:focus { border-color: ${accent}80; }
         .skl-select option { background: var(--bg-base); color: var(--text-primary); }
         .filter-btn { border: 1px solid var(--border); background: var(--bg-input); color: var(--text-secondary); padding: 8px 12px; border-radius: 999px; cursor: pointer; font-size: 12px; font-weight: 800; }
@@ -552,12 +552,12 @@ export default function DeveloperSkills() {
         tbody tr:hover td { background: var(--bg-input); color: var(--text-primary); }
       `}</style>
 
-      <div style={{ minHeight: "100vh", padding: "36px 40px 80px", color: "var(--text-primary)", fontFamily: "'DM Sans', sans-serif", background: "var(--bg-gradient)" }}>
+      <div style={{ minHeight: "100vh", padding: "36px 40px 80px", color: "var(--text-primary)", fontFamily: "'Inter', sans-serif", background: "var(--bg-gradient)" }}>
         <div style={{ maxWidth: 1180, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
           <header style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.5fr) minmax(280px, .85fr)", gap: 18 }}>
             <Card style={{ padding: "28px 32px" }}>
               <Badge>Code Quality Dashboard</Badge>
-              <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 34, fontWeight: 800, letterSpacing: "-.8px", margin: "16px 0 8px", lineHeight: 1.1 }}>{repo?.name || current?.repo_name || "Repository"}</h1>
+              <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 34, fontWeight: 800, letterSpacing: "-.8px", margin: "16px 0 8px", lineHeight: 1.1 }}>{repo?.name || current?.repo_name || "Repository"}</h1>
               <p style={{ margin: 0, color: "var(--text-secondary)", fontSize: 14 }}>Python · FastAPI</p>
               <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginTop: 18, color: "var(--text-muted)", fontSize: 13 }}>
                 <span>{fmt(detail?.project_size?.files ?? current?.lines_of_code ? detail?.project_size?.files : null)} Files</span>
@@ -697,7 +697,7 @@ export default function DeveloperSkills() {
         <aside onClick={(e) => e.stopPropagation()} style={{ width: "min(420px, 92vw)", height: "100%", background: "var(--bg-base)", borderLeft: "1px solid var(--border)", padding: 24, boxShadow: "var(--shadow-card)", overflowY: "auto" }}>
           <button onClick={() => setSelectedIssue(null)} style={{ float: "right", border: "1px solid var(--border)", background: "var(--bg-input)", color: "var(--text-primary)", borderRadius: 8, padding: "6px 10px", cursor: "pointer" }}>Close</button>
           <div className="sp-label">Issue</div>
-          <h2 style={{ fontFamily: "'Syne',sans-serif", margin: "8px 0 16px" }}>{selectedIssue.message}</h2>
+          <h2 style={{ fontFamily: "'Inter',sans-serif", margin: "8px 0 16px" }}>{selectedIssue.message}</h2>
           <div style={{ display: "grid", gap: 14, color: "var(--text-secondary)", fontSize: 14 }}>
             <div><strong style={{ color: "var(--text-primary)" }}>Type:</strong><br />{issueTypeLabel(selectedIssue.type)}</div>
             <div><strong style={{ color: "var(--text-primary)" }}>Severity:</strong><br />{selectedIssue.severity}</div>
